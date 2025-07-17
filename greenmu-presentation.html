@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GreenMU Paper Review - Interactive Presentation</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- MathJax for rendering LaTeX equations -->
+    <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1a202c; /* Dark background */
+            color: #e2e8f0; /* Light text */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow: hidden; /* Hide scrollbars */
+        }
+        .presentation-container {
+            width: 95%;
+            max-width: 1200px;
+            height: 700px;
+            background-color: #2d3748; /* Slightly lighter dark background for container */
+            border-radius: 1.5rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.4);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+        .slide {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            transition: opacity 0.7s ease-in-out;
+            transform: scale(0.95);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem 4rem;
+            text-align: center;
+        }
+        .slide.active {
+            opacity: 1;
+            transform: scale(1);
+            position: relative; /* Take up space when active */
+            z-index: 1;
+        }
+
+        .nav-buttons, .page-number, .nav-menu-container {
+            opacity: 0; /* Hidden by default */
+            transition: opacity 0.4s ease-in-out;
+            z-index: 10;
+            position: absolute;
+        }
+        
+        .presentation-container:hover .nav-buttons,
+        .presentation-container:hover .page-number,
+        .presentation-container:hover .nav-menu-container {
+            opacity: 1; /* Appear on container hover */
+        }
+
+        .nav-buttons {
+            bottom: 1.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav-button {
+            background-color: rgba(74, 85, 104, 0.5); /* Subtle background */
+            color: #e2e8f0;
+            padding: 0.6rem 1.2rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            border: 1px solid rgba(107, 114, 128, 0.5);
+            box-shadow: none;
+        }
+        .nav-button:hover {
+            background-color: #4a5568; /* Slightly more visible on hover */
+            transform: none;
+        }
+        .nav-button:disabled {
+            background-color: transparent;
+            color: #4a5568;
+            cursor: not-allowed;
+            border-color: #4a5568;
+        }
+
+        .progress-bar-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background-color: #4a5568;
+        }
+        .progress-bar {
+            height: 100%;
+            background-color: #63b3ed; /* Light blue */
+            width: 0%;
+            transition: width 0.7s ease-in-out;
+        }
+
+        /* Specific slide styling */
+        .slide h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #90cdf4; /* Lighter blue for titles */
+        }
+        .slide h2 {
+            font-size: 2.2rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #a7d9f7;
+            width: 100%;
+            text-align: left;
+            border-bottom: 2px solid #4a5568;
+            padding-bottom: 0.5rem;
+        }
+        .slide h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: #bee3f8;
+            text-align: left;
+            width: 100%;
+        }
+         .slide h4 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #a7d9f7;
+            text-align: center;
+            width: 100%;
+        }
+        .slide h5 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #f56565;
+        }
+        .slide p {
+            font-size: 1.125rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            text-align: left;
+            max-width: 90%;
+        }
+        .slide ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 1rem;
+            width: 90%;
+        }
+        .slide ul li {
+            font-size: 1.125rem;
+            margin-bottom: 0.75rem;
+            position: relative;
+            padding-left: 2rem;
+            text-align: left;
+        }
+        .slide ul li::before {
+            content: '✓';
+            color: #63b3ed;
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+        .key-issue-point {
+            background-color: #4a5568;
+            padding: 1rem;
+            border-radius: 0.75rem;
+            margin-bottom: 0.75rem;
+            text-align: left;
+            display: none; /* Use display none/block for reveal */
+            width: 100%;
+        }
+        .key-issue-point.visible {
+            display: block;
+        }
+        .equation-container {
+            background-color: #1a202c;
+            padding: 1rem;
+            border-radius: 0.75rem;
+            margin-top: 1rem;
+            text-align: left;
+            font-size: 1.1rem;
+            overflow-x: auto;
+        }
+        .equation-container .label {
+            font-weight: bold;
+            font-family: 'Inter', sans-serif;
+        }
+        .equation-container .incorrect { color: #f56565; }
+        .equation-container .correct { color: #48bb78; }
+        
+        .interactive-button {
+            background-color: #ed8936; /* Orange */
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            border: none;
+            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .interactive-button:hover {
+            background-color: #dd6b20; /* Darker orange */
+        }
+        .icon-card {
+            background-color: #4a5568;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .icon-card svg {
+            width: 3rem;
+            height: 3rem;
+            margin-bottom: 1rem;
+            color: #90cdf4;
+        }
+        .styled-table {
+            width: 100%;
+            margin-top: 1rem;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+        .styled-table th, .styled-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #4a5568;
+        }
+        .styled-table thead th {
+            background-color: #1a202c;
+            color: #a7d9f7;
+            font-weight: 600;
+        }
+        .styled-table tbody tr:nth-of-type(even) {
+            background-color: rgba(0,0,0,0.1);
+        }
+        .page-number {
+            bottom: 1.5rem;
+            right: 1.5rem;
+            font-size: 0.9rem;
+            color: #a0aec0;
+        }
+        .nav-menu-container {
+            top: 1.5rem;
+            right: 1.5rem;
+        }
+        #navMenu {
+            background-color: rgba(74, 85, 104, 0.7);
+            color: #e2e8f0;
+            border: 1px solid rgba(107, 114, 128, 0.7);
+            border-radius: 0.5rem;
+            padding: 0.5rem;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <div class="progress-bar-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        <div id="pageNumber" class="page-number"></div>
+        <div class="nav-menu-container">
+            <select id="navMenu" title="Go to slide"></select>
+        </div>
+
+        <!-- Slide 1: Title & Details -->
+        <div id="slide1" class="slide active">
+            <h1 class="text-3xl md:text-4xl text-center animate-pulse">A Critical Review of the GreenMU Framework</h1>
+            <p class="text-lg md:text-xl font-light text-center mt-2 mb-6 text-blue-200">
+                Simulation-Driven Computational Framework for Adaptive Energy-Efficient Optimization in Machine Learning-Based Intrusion Detection Systems
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full mt-6 pt-6 border-t border-gray-700">
+                <div>
+                    <h4 class="!text-center !text-xl !text-blue-300">The Paper</h4>
+                    <p class="!text-base !text-center">
+                        <strong>Authors:</strong> Ripal Ranpara, Osamah Alsalman, Om Prakash Kumar, Shobhit K. Patel<br>
+                        <strong>Publisher:</strong> Nature Scientific Reports<br>
+                        <strong>Date:</strong> 18 April 2025
+                    </p>
+                </div>
+                <div>
+                    <h4 class="!text-center !text-xl !text-blue-300">Presenters</h4>
+                     <p class="!text-base !text-center">
+                        Ahmed Elpannann & Ze Engida
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 2: Outline -->
+        <div id="slide2" class="slide">
+            <h2>Presentation Outline</h2>
+            <ul class="text-xl md:text-2xl">
+                <li class="mb-3">1. Introduction & Core Concepts</li>
+                <li class="mb-3">2. Critical Analysis of Data & Figures</li>
+                <li class="mb-3">3. Critique of Core Flaws & Reproducibility</li>
+                <li class="mb-3">4. Recommendations for Future Work</li>
+                <li class="mb-3">5. Conclusion</li>
+                <li class="mb-3">6. Appendix & Q&A</li>
+            </ul>
+        </div>
+
+        <!-- Slide 3: Paper Summary -->
+        <div id="slide3" class="slide">
+            <h2>Paper Summary: The GreenMU Proposal</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full mt-4">
+                <div>
+                    <h3>Core Concepts</h3>
+                    <ul>
+                        <li>Adaptive energy-efficient optimization framework.</li>
+                        <li>Dynamic algorithm (MUGuard) to balance performance and energy.</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Claimed Performance</h3>
+                     <ul>
+                        <li><strong>99%</strong> Accuracy</li>
+                        <li><strong>31%</strong> Energy Saving</li>
+                        <li><strong>15%</strong> Processing Time Reduction</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Framework Overview -->
+        <div id="slide4" class="slide">
+            <h2>Framework Overview</h2>
+            <p>The GreenMU framework is a multi-layered architecture designed for adaptive intrusion detection.</p>
+            <img 
+                src="https://media.springernature.com/full/springer-static/image/art%3A10.1038%2Fs41598-025-93254-4/MediaObjects/41598_2025_93254_Fig1_HTML.png" 
+                alt="Overview of the GreenMU Framework" 
+                style="max-height: 60%; max-width: 70%; border: 1px solid #4a5568; border-radius: 0.5rem; margin-top: 1rem;"
+                onerror="this.onerror=null;this.src='https://placehold.co/800x450/e9ecef/6c757d?text=Figure+1+Not+Available';">
+            <p style="font-size: 0.8rem; text-align: center; margin-top: 0.5rem; color: #a0aec0;">Figure 1: Overview of the GreenMU Framework. Source: Nature Scientific Reports.</p>
+        </div>
+
+        <!-- Slide 5: Knowledge Distillation -->
+        <div id="slide5" class="slide">
+            <h2>Core Concept: Knowledge Distillation</h2>
+            <div class="flex flex-col md:flex-row items-center justify-around w-full gap-8">
+                <div class="w-full md:w-1/3 text-center">
+                    <div class="icon-card p-4 mb-2">Large Teacher Model<br><span class="text-sm text-blue-300">(High Accuracy, High Energy)</span></div>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-blue-400 mx-auto my-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" /></svg>
+                    <div class="icon-card p-4 mt-2">Small Student Model<br><span class="text-sm text-blue-300">(High Accuracy, Low Energy)</span></div>
+                </div>
+                <div class="w-full md:w-2/3">
+                    <p class="!text-center mb-4">A smaller "student" model is trained to mimic a larger "teacher" model, guided by a specialized loss function.</p>
+                     <div class="equation-container w-full">
+                        <p class="label">Distillation Loss Function:</p>
+                        $$ \mathcal{L}_{KD} = \alpha \cdot \mathcal{L}_{soft}(p_s, p_t) + \beta \cdot \mathcal{L}_{hard}(y_s, y_t) $$
+                        <p class="label mt-4">Pruning Efficiency:</p>
+                        $$ \eta_{\text{distill}} = \frac{\|\Delta\Theta_{\text{teacher-student}}\|}{\|\Theta_{\text{teacher}}\|} $$
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Strengths -->
+        <div id="slide6" class="slide">
+            <h2>Paper Strength</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 w-full mt-4">
+                <div class="icon-card">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 mb-4 text-blue-400">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.286z" />
+                    </svg>
+                    <p>Timely & Relevant Topic</p>
+                </div>
+                <div class="icon-card">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 mb-4 text-blue-400">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.311a15.045 15.045 0 01-7.5 0C4.505 20.995 2.25 18.284 2.25 15c0-1.602.424-3.126 1.172-4.418c.748-1.292 1.864-2.438 3.17-3.334c1.306-.896 2.827-1.483 4.408-1.697a6.01 6.01 0 011.5-.189m3.75 7.478a12.06 12.06 0 004.5 0m-3.75 2.311a15.045 15.045 0 007.5 0c2.255-1.995 4.5-4.706 4.5-7.5c0-1.602-.424-3.126-1.172-4.418c-.748-1.292-1.864-2.438-3.17-3.334c-1.306-.896-2.827-1.483-4.408-1.697a6.01 6.01 0 00-1.5-.189" />
+                    </svg>
+                    <p>Innovative Concept</p>
+                </div>
+                <div class="icon-card">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 mb-4 text-blue-400">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0011.667 0l3.181-3.183m-4.991-2.696a8.25 8.25 0 01-11.667 0l-3.181 3.183m16.341-3.183l-3.181-3.183a8.25 8.25 0 00-11.667 0l-3.181 3.183" />
+                    </svg>
+                    <p>Dynamic Resource Management</p>
+                </div>
+                <div class="icon-card">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 mb-4 text-blue-400">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
+                    </svg>
+                    <p>Modular Architecture</p>
+                </div>
+            </div>
+        </div>
+        
+        
+        <!-- Slide 7: Critique: Ambiguous Figures and Tables -->
+        <div id="slide7" class="slide">
+            <h2>Critique: Ambiguous Figures and Tables</h2>
+            <div class="flex flex-col md:flex-row items-center justify-center gap-8 w-full mt-4">
+                <div class="w-full md:w-1/2 flex flex-col items-center">
+                     <img 
+                        src="https://media.springernature.com/full/springer-static/image/art%3A10.1038%2Fs41598-025-93254-4/MediaObjects/41598_2025_93254_Fig6_HTML.png" 
+                        alt="MUGuard Energy vs. Accuracy Trade-off" 
+                        style="max-height: 600px; border: 1px solid #4a5568; border-radius: 0.5rem;"
+                        onerror="this.onerror=null;this.src='https://placehold.co/600x400/e9ecef/6c757d?text=Figure+6+Not+Available';">
+                     <p class="text-xs text-center mt-2 text-gray-400">Figure 6: MUGuard Energy vs. Accuracy Trade-off</p>
+                </div>
+                <div class="w-full md:w-1/2">
+                    <table class="styled-table">
+                        <thead>
+                            <tr>
+                                <th>Metric</th>
+                                <th>Baseline (RF) (%)</th>
+                                <th>Baseline (1D-CNN) (%)</th>
+                                <th>Baseline (S2CGAN-IDS) (%)</th>
+                                <th>GreenMU (%)</th>
+                                <th>Improvement</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Energy consumption</td><td>40</td><td>38</td><td>35</td><td>28</td><td>30% reduction (vs. RF)</td></tr>
+                            <tr><td>Detection accuracy</td><td>90</td><td>92</td><td>98.70</td><td>99</td><td>10% increase (vs. RF)</td></tr>
+                            <tr><td>Processing time reduction</td><td>0</td><td>5</td><td>8</td><td>15</td><td>15% improvement (vs. RF)</td></tr>
+                        </tbody>
+                    </table>
+                     <p class="text-xs text-center mt-6 text-gray-400">Table 3: GreenMU performance table.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 8: Critique of Metrics -->
+        <div id="slide8" class="slide">
+            <h2>Critique: Visuals</h2>
+            <p>In Figure 8, the bar chart on the left and the "vibrant radar chart" on the right display the exact same things. This redundancy pads the paper without offering new insight.</p>
+             <img 
+                src="https://media.springernature.com/full/springer-static/image/art%3A10.1038%2Fs41598-025-93254-4/MediaObjects/41598_2025_93254_Fig8_HTML.png" 
+                alt="Standard Metrics Precision, Recall, F1-Score result analysis" 
+                style="max-height: 80%; max-width: 85%; border: 1px solid #4a5568; border-radius: 0.5rem; margin-top: 1rem;"
+                onerror="this.onerror=null;this.src='https://placehold.co/600x400/e9ecef/6c757d?text=Figure+8+Not+Available';">
+        </div>
+
+
+
+        <!-- Slide 9: CRITIQUE: Key Issues (Interactive Reveal) -->
+        <div id="slide9" class="slide">
+            <h2>Critique: Core Flaws</h2>
+            <p class="text-center w-full">
+                Let's dive into the major flaws. Click to expose the issues.
+            </p>
+            <div class="w-full max-w-3xl mx-auto">
+                <button class="interactive-button block w-full text-left pl-4" onclick="revealIssue('writing')">Writing & Clarity ✍️</button>
+                <div id="issue-writing" class="key-issue-point">
+                    <h3 class="text-red-300">Unsubstantiated Claims & Poor Writing:</h3>
+                    <p>Key performance claims lack rigorous support. The writing is redundant, confusing, and overly "sales-oriented" instead of scientific. Inconsistent variable naming and ambiguity are prevalent.</p>
+                </div>
+
+                <button class="interactive-button block w-full text-left pl-4" onclick="revealIssue('equation')">Logical Flaw in Core Equation! 🤯</button>
+                <div id="issue-equation" class="key-issue-point">
+                    <h5 class="text-red-300">Equation 4 is against the paper's premise.</h5>
+                    <div class="equation-container">
+                        <p class="label incorrect">Original (Incorrect) Equation:</p>
+                        $$ M(t) = \begin{cases} M_{\text{light}} & \text{if } CTC < T_{\text{low}} \text{ and } E_{\text{avail}} > E_{\text{min}} \\ M_{\text{complex}} & \text{if } CTC \ge T_{\text{high}} \text{ or } E_{\text{avail}} \le E_{\text{min}} \end{cases} $$
+                        <p class="label correct mt-4">Logically Corrected Equation:</p>
+                        $$ M(t) = \begin{cases} M_{\text{complex}} & \text{if } CTC \ge T_{\text{high}} \text{ and } E_{\text{avail}} > E_{\text{min}} \\ M_{\text{light}} & \text{otherwise} \end{cases} $$
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: Critique: Reproducibility -->
+        <div id="slide10" class="slide">
+            <h2>Critique: Reproducibility and Benchmarking</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 w-full mt-4">
+                <div class="icon-card">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5" /></svg>
+                    <p>Closed-Source Code</p>
+                </div>
+                <div class="icon-card">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" /></svg>
+                    <p>Missing Experimental Details (e.g., energy measurement)</p>
+                </div>
+                <div class="icon-card">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 1.5m1-1.5l1 1.5m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5m.5-1.5l.5-1.5m9-3l-3-3m0 0l-3 3m3-3v12" /></svg>
+                    <p>Insufficient Benchmarking</p>
+                </div>
+                <div class="icon-card">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0h18" /></svg>
+                    <p>Outdated Dataset</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: Recommendations Part 1 -->
+        <div id="slide11" class="slide">
+            <h2>Recommendations for Future Work (1/2)</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full mt-4">
+                <div class="icon-card">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" /></svg>
+                    <h3>Rigor & Transparency</h3>
+                    <p class="text-sm">Re-write the paper, provide full methodology, and publish code/data.</p>
+                </div>
+                <div class="icon-card">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.034 15.118a.5.5 0 01.676-.324l3.433 1.717.006.003.002.001.002.001a.5.5 0 01.213.665l-1.717 3.433a.5.5 0 01-.665.213l-3.433-1.717a.5.5 0 01-.213-.665l1.717-3.433zM4.034 15.118l-1.717-3.433a.5.5 0 01.213-.665l3.433-1.717a.5.5 0 01.665.213l1.717 3.433m-3.433-1.717a.5.5 0 01.324.676l-1.717 3.433m1.717-3.433l3.433 1.717m-1.996-3.012a.5.5 0 01.676-.324l3.433 1.717.006.003.002.001.002.001a.5.5 0 01.213.665l-1.717 3.433a.5.5 0 01-.665.213l-3.433-1.717a.5.5 0 01-.213-.665l1.717-3.433zM6.03 12.106l-1.717-3.433a.5.5 0 01.213-.665l3.433-1.717a.5.5 0 01.665.213l1.717 3.433m-3.433-1.717a.5.5 0 01.324.676l-1.717 3.433m1.717-3.433l3.433 1.717m0 0a.5.5 0 01.676-.324l3.433 1.717.006.003.002.001.002.001a.5.5 0 01.213.665l-1.717 3.433a.5.5 0 01-.665.213l-3.433-1.717a.5.5 0 01-.213-.665l1.717-3.433zM8.026 9.094l-1.717-3.433a.5.5 0 01.213-.665l3.433-1.717a.5.5 0 01.665.213l1.717 3.433m-3.433-1.717a.5.5 0 01.324.676L6.31 12.527m1.717-3.433l3.433 1.717" /></svg>
+                    <h3>Modernize Datasets & Models</h3>
+                    <p class="text-sm">Use recent datasets (e.g., CIC-IDS2018) and explore advanced models like Transformers.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 12: Recommendations Part 2 -->
+        <div id="slide12" class="slide">
+            <h2>Recommendations for Future Work (2/2)</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full mt-4">
+                <div class="icon-card">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-2.25-1.313M21 7.5v2.25m0-2.25l-2.25 1.313M3 7.5l2.25-1.313M3 7.5l2.25 1.313M3 7.5v2.25m9 3l2.25-1.313M12 12.75l-2.25 1.313M12 12.75V15m0-2.25l2.25 1.313M9 21l2.25-1.313M9 21v-2.25m0 2.25l2.25 1.313M3 12.75l2.25-1.313M3 12.75l2.25 1.313M3 12.75v2.25M21 12.75l-2.25-1.313M21 12.75l-2.25 1.313M21 12.75v2.25M12 3l2.25 1.313M12 3l-2.25 1.313M12 3v2.25" /></svg>
+                    <h3>Real-World Validation</h3>
+                    <p class="text-sm">Move from simulation to online testing in real network environments to prove effectiveness.</p>
+                </div>
+                <div class="icon-card">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.311a15.045 15.045 0 01-7.5 0C4.505 20.995 2.25 18.284 2.25 15c0-1.602.424-3.126 1.172-4.418c.748-1.292 1.864-2.438 3.17-3.334c1.306-.896 2.827-1.483 4.408-1.697a6.01 6.01 0 011.5-.189m3.75 7.478a12.06 12.06 0 004.5 0m-3.75 2.311a15.045 15.045 0 007.5 0c2.255-1.995 4.5-4.706 4.5-7.5c0-1.602-.424-3.126-1.172-4.418c-.748-1.292-1.864-2.438-3.17-3.334c-1.306-.896-2.827-1.483-4.408-1.697a6.01 6.01 0 00-1.5-.189" /></svg>
+                    <h3>Model Interpretability</h3>
+                    <p class="text-sm">Integrate Explainable AI (XAI) to understand model decisions and build trust.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 13: Conclusion -->
+        <div id="slide13" class="slide">
+            <h2>Conclusion</h2>
+            <h3>Summary of Findings:</h3>
+            <p>
+                The paper addresses a highly relevant problem and proposes a conceptually interesting solution. The idea of an adaptive framework is promising.
+            </p>
+            <p>
+                However, the execution is undermined by significant flaws in methodology, clarity, and reproducibility. The claims are not sufficiently supported by the evidence provided.
+            </p>
+            <h3>Final Assessment:</h3>
+            <p style="font-size: 1.4rem; font-weight: bold; color: #90cdf4; text-align: center; margin-top: 2rem;">
+                The paper, in its current form, does not meet the standards required for a robust scientific contribution and requires substantial revision.
+            </p>
+        </div>
+        
+        
+         <!-- Slide 19: Q&A -->
+        <div id="slide19" class="slide">
+            <h1 class="text-5xl md:text-6xl lg:text-7xl font-extrabold animate-pulse">
+                Q & A
+            </h1>
+            <p class="text-2xl md:text-3xl text-blue-200 mt-4">
+                Thank you for your attention.
+            </p>
+        </div>
+
+        <div class="nav-buttons">
+            <button id="prevBtn" class="nav-button" disabled>Previous</button>
+            <button id="nextBtn" class="nav-button">Next</button>
+        </div>
+        
+        
+        <!-- Slide 14: Appendix -->
+        <div id="slide14" class="slide">
+            <h2>Appendix: Standard Metrics Comparison</h2>
+            <p>This table provides a comparison of standard performance metrics across different models tested in the paper.</p>
+            <table class="styled-table">
+                <thead>
+                    <tr>
+                        <th>ML model</th>
+                        <th>Accuracy</th>
+                        <th>Precision</th>
+                        <th>Recall</th>
+                        <th>F1-Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>RF</td><td>93.56</td><td>94.67</td><td>93.56</td><td>93.23</td></tr>
+                    <tr><td>1D-CNN</td><td>95.87</td><td>96.34</td><td>95.87</td><td>95.91</td></tr>
+                    <tr><td>S2CGAN-IDS</td><td>97.89</td><td>97.12</td><td>97.89</td><td>97.99</td></tr>
+                    <tr><td>GreenMU (teacher)</td><td>99.78</td><td>99.81</td><td>99.78</td><td>99.78</td></tr>
+                    <tr><td>GreenMU (student)</td><td>99.12</td><td>99.34</td><td>99.12</td><td>99.11</td></tr>
+                </tbody>
+            </table>
+            <p class="text-xs text-center mt-2 text-gray-400">Table 4: Standard metrics comparison.</p>
+        </div>
+        
+        <!-- Slide 15: Appendix Video -->
+        <div id="slide15" class="slide">
+            <h2>Appendix: GreenMUFramework Video</h2>
+            <p>A short demonstration of the GreenMU framework concept.</p>
+            <video class="w-full max-w-3xl mt-4 border-2 border-gray-600 rounded-lg" controls>
+                <source src="GreenMUFrameworkScene.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+
+        <!-- Slide 16: Appendix Video -->
+        <div id="slide16" class="slide">
+            <h2>Appendix: Knowledge Distillation Video</h2>
+            <p>A short demonstration of the Knowledge Distillation concept.</p>
+            <video class="w-full max-w-3xl mt-4 border-2 border-gray-600 rounded-lg" controls>
+                <source src="KnowledgeDistillationScene.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+
+        <!-- Slide 17: Appendix Video -->
+        <div id="slide17" class="slide">
+            <h2>Appendix: Energy Accuracy Tradeoff Video</h2>
+            <p>A short demonstration of the Tradeoff concept.</p>
+            <video class="w-full max-w-3xl mt-4 border-2 border-gray-600 rounded-lg" controls>
+                <source src="TradeoffScene.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+
+        <!-- Slide 18: Appendix Video -->
+        <div id="slide18" class="slide">
+            <h2>Appendix: Model Selection Video</h2>
+            <p>A short demonstration of the Model Selection concept.</p>
+            <video class="w-full max-w-3xl mt-4 border-2 border-gray-600 rounded-lg" controls>
+                <source src="ModelSelectionScene.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+    </div>
+
+    <script>
+        const slides = document.querySelectorAll('.slide');
+        let currentSlide = 0;
+        const totalSlides = slides.length;
+        const progressBar = document.getElementById('progressBar');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const pageNumber = document.getElementById('pageNumber');
+        const navMenu = document.getElementById('navMenu');
+
+        // --- Populate Navigation Menu ---
+        slides.forEach((slide, index) => {
+            const option = document.createElement('option');
+            option.value = index;
+            let title = slide.querySelector('h2')?.textContent || slide.querySelector('h1')?.textContent.substring(0,25) + "..." || `Slide ${index + 1}`;
+            if (index === 0) title = "Title Slide";
+            option.textContent = title;
+            navMenu.appendChild(option);
+        });
+        
+        navMenu.addEventListener('change', (e) => {
+            goToSlide(parseInt(e.target.value));
+        });
+
+        function goToSlide(slideIndex) {
+            if (slideIndex >= 0 && slideIndex < totalSlides) {
+                resetInteractiveElements();
+                currentSlide = slideIndex;
+                updateView();
+            }
+        }
+
+        function updateView() {
+            slides.forEach((slide, i) => {
+                const video = slide.querySelector('video');
+                if (i === currentSlide) {
+                    slide.classList.add('active');
+                } else {
+                    slide.classList.remove('active');
+                    // Pause video if slide is not active
+                    if (video) {
+                        video.pause();
+                    }
+                }
+            });
+
+            const progress = ((currentSlide + 1) / totalSlides) * 100;
+            progressBar.style.width = `${progress}%`;
+
+            prevBtn.disabled = currentSlide === 0;
+            nextBtn.disabled = currentSlide === totalSlides - 1;
+            
+            pageNumber.textContent = `${currentSlide + 1} / ${totalSlides}`;
+            navMenu.value = currentSlide;
+            
+            // Re-render MathJax if the new slide has math
+            if (typeof MathJax !== 'undefined' && slides[currentSlide].querySelector('.equation-container')) {
+                MathJax.typesetPromise();
+            }
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                goToSlide(currentSlide + 1);
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                // BUG FIX: Was going to next slide instead of previous
+                goToSlide(currentSlide - 1);
+            }
+        }
+
+        // Interactive elements for Slide 9 (Key Issues)
+        function revealIssue(issueId) {
+            const issueDiv = document.getElementById(`issue-${issueId}`);
+            if (issueDiv) {
+                // Hide other open issues before showing the new one
+                document.querySelectorAll('.key-issue-point.visible').forEach(el => {
+                    if(el.id !== `issue-${issueId}`) {
+                       el.classList.remove('visible');
+                    }
+                });
+                // Toggle the clicked one
+                issueDiv.classList.toggle('visible');
+                // Re-render MathJax if the revealed section has math
+                if (issueDiv.classList.contains('visible') && typeof MathJax !== 'undefined' && issueDiv.querySelector('.equation-container')) {
+                    MathJax.typesetPromise();
+                }
+            }
+        }
+
+        function resetInteractiveElements() {
+            document.querySelectorAll('.key-issue-point').forEach(el => {
+                el.classList.remove('visible');
+            });
+        }
+
+        prevBtn.addEventListener('click', prevSlide);
+        nextBtn.addEventListener('click', nextSlide);
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') {
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                prevSlide();
+            }
+        });
+
+        // Initialize first slide
+        updateView();
+    </script>
+</body>
+</html>
+
