@@ -5,64 +5,41 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GreenMU Presentation</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
-    .tabs { display: flex; background: #2c3e50; }
-    .tab {
-      flex: 1;
-      padding: 1em;
-      cursor: pointer;
-      color: #ecf0f1;
-      text-align: center;
-      background: #34495e;
-      border: none;
-      outline: none;
-      transition: background 0.2s;
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      background: #222;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-    .tab.active { background: #1abc9c; color: #fff; }
-    .tab-content { display: none; padding: 2em; }
-    .tab-content.active { display: block; }
-    iframe { width: 100%; height: 900px; border: none; }
-    .video-list { list-style: none; padding: 0; }
-    .video-list li { margin-bottom: 1em; }
+    .presentation-container {
+      width: 90vw;
+      height: 90vh;
+      background: #fff;
+      box-shadow: 0 0 32px rgba(0,0,0,0.2);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      border-radius: 12px;
+      background: #fff;
+      box-shadow: none;
+      display: block;
+    }
   </style>
 </head>
 <body>
-  <div class="tabs">
-    <button class="tab active" onclick="showTab(0)">Presentation</button>
-    <button class="tab" onclick="showTab(1)">Videos</button>
-    <button class="tab" onclick="showTab(2)">README</button>
-  </div>
-  <div class="tab-content active" id="tab0">
+  <div class="presentation-container">
     <iframe src="greenmu-presentation.html"></iframe>
   </div>
-  <div class="tab-content" id="tab1">
-    <h2>Videos</h2>
-    <ul class="video-list">
-      <li><video src="GreenMUFrameworkScene.mp4" controls width="600"></video><br>GreenMU Framework Scene</li>
-      <li><video src="KnowledgeDistillationScene.mp4" controls width="600"></video><br>Knowledge Distillation Scene</li>
-      <li><video src="ModelSelectionScene.mp4" controls width="600"></video><br>Model Selection Scene</li>
-      <li><video src="TradeoffScene.mp4" controls width="600"></video><br>Tradeoff Scene</li>
-    </ul>
-  </div>
-  <div class="tab-content" id="tab2">
-    <h2>README</h2>
-    <pre id="readme-content">Loading README...</pre>
-  </div>
-  <script>
-    function showTab(idx) {
-      document.querySelectorAll('.tab').forEach((tab, i) => {
-        tab.classList.toggle('active', i === idx);
-      });
-      document.querySelectorAll('.tab-content').forEach((content, i) => {
-        content.classList.toggle('active', i === idx);
-      });
-    }
-    // Load README.md content
-    fetch('README.md')
-      .then(response => response.text())
-      .then(text => {
-        document.getElementById('readme-content').textContent = text;
-      });
-  </script>
 </body>
 </html>
