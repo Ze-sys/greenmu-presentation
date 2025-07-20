@@ -332,78 +332,7 @@
             </div>
         </div>
 
-        <!-- Final Diagram -->
-        <div class="bg-white p-8 rounded-lg shadow-md">
-            <h2 class="text-2xl font-semibold mb-6">The Complete Cause-and-Effect Graph</h2>
-            <div class="final-diagram-wrapper">
-                <div class="final-diagram-container">
-                    <!-- SVG Lines and Symbols -->
-                    <svg class="absolute top-0 left-0 w-full h-full" style="z-index: 5;">
-                        <!-- Horizontal Arrows -->
-                        <line x1="1040" y1="90" x2="920" y2="90" stroke="#3b82f6" stroke-width="3" marker-end="url(#arrowhead)" />
-                        <line x1="850" y1="90" x2="730" y2="90" stroke="#3b82f6" stroke-width="3" marker-end="url(#arrowhead)" />
-                        <line x1="660" y1="90" x2="540" y2="90" stroke="#3b82f6" stroke-width="3" marker-end="url(#arrowhead)" />
-                        <line x1="470" y1="90" x2="350" y2="90" stroke="#3b82f6" stroke-width="3" marker-end="url(#arrowhead)" />
-                        <line x1="280" y1="90" x2="160" y2="90" stroke="#3b82f6" stroke-width="3" marker-end="url(#arrowhead)" />
-                        <line x1="470" y1="310" x2="350" y2="310" stroke="#3b82f6" stroke-width="3" marker-end="url(#arrowhead)" />
-                        <line x1="660" y1="310" x2="540" y2="310" stroke="#3b82f6" stroke-width="3" marker-end="url(#arrowhead)" />
-                        <line x1="850" y1="530" x2="730" y2="530" stroke="#3b82f6" stroke-width="3" marker-end="url(#arrowhead)" />
-                        <!-- Vertical Arrows -->
-                        <line x1="505" y1="160" x2="505" y2="240" stroke="#3b82f6" stroke-width="3" marker-end="url(#arrowhead)" />
-                        <line x1="505" y1="380" x2="505" y2="460" stroke="#3b82f6" stroke-width="3" marker-end="url(#arrowhead)" />
-                        <line x1="505" y1="590" x2="505" y2="670" stroke="#3b82f6" stroke-width="3" marker-end="url(#arrowhead)" />
-                        <line x1="90" y1="160" x2="90" y2="240" stroke="#3b82f6" stroke-width="3" marker-end="url(#arrowhead)" />
-                        <line x1="90" y1="380" x2="90" y2="460" stroke="#3b82f6" stroke-width="3" marker-end="url(#arrowhead)" />
-                        <line x1="280" y1="310" x2="160" y2="310" stroke="#3b82f6" stroke-width="3" marker-end="url(#arrowhead)" />
-                        <line x1="850" y1="160" x2="850" y2="240" stroke="#3b82f6" stroke-width="3" marker-end="url(#arrowhead)" />
-                        <line x1="850" y1="380" x2="850" y2="460" stroke="#3b82f6" stroke-width="3" marker-end="url(#arrowhead)" />
-                        <!-- Complex Path Arrows -->
-                        <polyline points="1040,130 1090,130 1090,490 920,490" stroke="#3b82f6" stroke-width="3" fill="none" marker-end="url(#arrowhead)" />
-                        <!-- Symbols -->
-                        <svg x="491" y="245" width="28" height="28" class="text-red-500"><use xlink:href="#causes-symbol-square"/></svg>
-                        <svg x="491" y="465" width="28" height="28" class="text-red-500"><use xlink:href="#causes-symbol-square"/></svg>
-                        <svg x="491" y="675" width="28" height="28" class="text-red-500"><use xlink:href="#causes-symbol-square"/></svg>
-                        <svg x="836" y="245" width="28" height="28" class="text-red-500"><use xlink:href="#causes-symbol-square"/></svg>
-                        <svg x="76" y="245" width="28" height="28" class="text-green-500"><use xlink:href="#eliminates-symbol-circle"/></svg>
-                    </svg>
-
-                    <!-- Nodes -->
-                    <div class="final-node" style="left: 970px; top: 20px;"><div class="node puf-node">Wind Energy Harvesting</div><div class="font-bold mt-2">(PUF)</div></div>
-                    <div class="final-node" style="left: 780px; top: 20px;"><div class="node uf-node">Convert Mech to Electrical</div><div class="font-bold mt-2">(UF8)</div></div>
-                    <div class="final-node" style="left: 590px; top: 20px;"><div class="node uf-node">RPM Multipliers</div><div class="font-bold mt-2">(UF9)</div></div>
-                    <div class="final-node" style="left: 400px; top: 20px;"><div class="node uf-node">Turbine Rotation</div><div class="font-bold mt-2">(UF1)</div></div>
-                    <div class="final-node" style="left: 210px; top: 20px;"><div class="node uf-node">Control Blade Yaw</div><div class="font-bold mt-2">(UF6)</div></div>
-                    <div class="final-node" style="left: 20px; top: 20px;"><div class="node uf-node">Turbine Management</div><div class="font-bold mt-2">(UF5)</div></div>
-                    <div class="final-node" style="left: 20px; top: 240px;"><div class="node uf-node">Turbine Op. Coordination</div><div class="font-bold mt-2">(UF2)</div></div>
-                    <div class="final-node" style="left: 210px; top: 240px;"><div class="node hf-node">Autonomous Turbine</div><div class="font-bold mt-2">[HF4]</div></div>
-                    <div class="final-node" style="left: 400px; top: 240px;"><div class="node hf-node">Slow Wind</div><div class="font-bold mt-2">[HF2]</div></div>
-                    <div class="final-node" style="left: 590px; top: 240px;"><div class="node phf-node">Wind Wake</div><div class="font-bold mt-2">[PHF]</div></div>
-                    <div class="final-node" style="left: 400px; top: 460px;"><div class="node hf-node">Turbulence</div><div class="font-bold mt-2">[HF3]</div></div>
-                    <div class="final-node" style="left: 400px; top: 670px;"><div class="node uf-node">Wind Speed & Direction</div><div class="font-bold mt-2">(UF4)</div></div>
-                    <div class="final-node" style="left: 780px; top: 240px;"><div class="node uf-node">High Wind Speed</div><div class="font-bold mt-2">(UF3)</div></div>
-                    <div class="final-node" style="left: 780px; top: 460px;"><div class="node hf-node">Turbine Damage</div><div class="font-bold mt-2">[HF5]</div></div>
-                    
-                    <!-- Labels -->
-                    <div class="final-label" style="left: 925px; top: 78px;">is required for</div>
-                    <div class="final-label" style="left: 735px; top: 78px;">is required for</div>
-                    <div class="final-label" style="left: 545px; top: 78px;">is required for</div>
-                    <div class="final-label" style="left: 355px; top: 78px;">is required for</div>
-                    <div class="final-label" style="left: 165px; top: 78px;">is required for</div>
-                    <div class="final-label" style="left: 355px; top: 298px;">causes</div>
-                    <div class="final-label" style="left: 545px; top: 298px;">causes</div>
-                    <div class="final-label" style="left: 735px; top: 518px;">causes</div>
-                    <div class="final-label" style="left: 515px; top: 195px;">causes</div>
-                    <div class="final-label" style="left: 515px; top: 415px;">causes</div>
-                    <div class="final-label" style="left: 515px; top: 625px;">causes</div>
-                    <div class="final-label" style="left: 100px; top: 195px;">is required for</div>
-                    <div class="final-label" style="left: 100px; top: 415px;">is required for</div>
-                    <div class="final-label" style="left: 165px; top: 298px;">eliminates</div>
-                    <div class="final-label" style="left: 860px; top: 195px;">causes</div>
-                    <div class="final-label" style="left: 860px; top: 415px;">causes</div>
-                    <div class="final-label" style="left: 1095px; top: 295px;">eliminates</div>
-                </div>
-            </div>
-        </div>
+        <!-- The Complete Cause-and-Effect Graph section removed as requested -->
     </div>
 </body>
 </html>

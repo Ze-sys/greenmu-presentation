@@ -38,27 +38,25 @@
   </style>
 </head>
 <body>
-  <div style="position:absolute;top:24px;left:24px;z-index:10;display:flex;gap:1em;align-items:center;">
-    <button onclick="window.open(document.getElementById('presentation-select').value, '_blank')" style="padding:0.7em 1.2em;font-size:1em;background:#1abc9c;color:#fff;border:none;border-radius:6px;box-shadow:0 2px 8px rgba(0,0,0,0.1);cursor:pointer;">Open Selected in New Tab</button>
-    <select id="presentation-select" style="padding:0.5em 1em;font-size:1em;border-radius:6px;">
-      <!-- <option value="greenmu-presentation.html">GreenMU Presentation</option> -->
-      <option value="triz-pfp/Step 1: Problem Identification.html">TRIZ Step 1: Problem Identification</option>
-      <option value="triz-pfp/Step 2: Functional Analysis.html">TRIZ Step 2: Functional Analysis</option>
-      <option value="triz-pfp/Step 2: Key Critical Functions.html">TRIZ Step 2: Key Critical Functions</option>
-      <option value="triz-pfp/Step 3: Probing Questions & Problem Statements.html">TRIZ Step 3: Probing Questions & Problem Statements</option>
-      <option value="triz-pfp/Step 4: Classify and Prioritize.html">TRIZ Step 4: Classify and Prioritize</option>
-      <option value="triz-pfp/Section 5: CE Graph Construction.html">TRIZ Step 5: CE Graph Construction</option>
-      <option value="triz-pfp/The Complete Cause-and-Effect Graph-unconnected.html">The Complete Cause-and-Effect Graph</option>
-      <option value="triz-pfp/complete-ce.html">Complete Cause-and-Effect Graph (Image Only)</option>
-    </select>
-  </div>
-  <div class="presentation-container">
-    <iframe id="presentation-iframe" src="greenmu-presentation.html"></iframe>
+    <nav style="width:100vw;position:fixed;top:0;left:0;z-index:100;background:#1abc9c;padding:0.5em 0.5em 0.5em 2em;box-shadow:0 2px 8px rgba(0,0,0,0.08);display:flex;align-items:center;">
+      <span style="font-size:1.3em;font-weight:bold;color:#fff;margin-right:2em;">TRIZ PFP</span>
+      <ul style="list-style:none;display:flex;gap:1.5em;margin:0;padding:0;">
+        <li><a href="#" onclick="loadPresentation('triz-pfp/Step 1: Problem Identification.html')" style="color:#fff;text-decoration:none;font-size:1em;padding:0.3em 0.7em;border-radius:4px;transition:background 0.2s;">Step 1: Problem Identification</a></li>
+        <li><a href="#" onclick="loadPresentation('triz-pfp/Step 2: Functional Analysis.html')" style="color:#fff;text-decoration:none;font-size:1em;padding:0.3em 0.7em;border-radius:4px;transition:background 0.2s;">Step 2: Functional Analysis</a></li>
+        <li><a href="#" onclick="loadPresentation('triz-pfp/Step 2: Key Critical Functions.html')" style="color:#fff;text-decoration:none;font-size:1em;padding:0.3em 0.7em;border-radius:4px;transition:background 0.2s;">Step 2: Key Critical Functions</a></li>
+        <li><a href="#" onclick="loadPresentation('triz-pfp/Step 3: Probing Questions & Problem Statements.html')" style="color:#fff;text-decoration:none;font-size:1em;padding:0.3em 0.7em;border-radius:4px;transition:background 0.2s;">Step 3: Probing Questions</a></li>
+        <li><a href="#" onclick="loadPresentation('triz-pfp/Step 4: Classify and Prioritize.html')" style="color:#fff;text-decoration:none;font-size:1em;padding:0.3em 0.7em;border-radius:4px;transition:background 0.2s;">Step 4: Classify & Prioritize</a></li>
+        <li><a href="#" onclick="loadPresentation('triz-pfp/Section 5: CE Graph Construction.html')" style="color:#fff;text-decoration:none;font-size:1em;padding:0.3em 0.7em;border-radius:4px;transition:background 0.2s;">Step 5: CE Graph Construction</a></li>
+        <li><a href="#" onclick="loadPresentation('triz-pfp/complete-ce.html')" style="color:#fff;text-decoration:none;font-size:1em;padding:0.3em 0.7em;border-radius:4px;transition:background 0.2s;">Complete CE Graph (Image)</a></li>
+      </ul>
+    </nav>
+  <div class="presentation-container" style="margin-top:4em;">
+    <iframe id="presentation-iframe" src="triz-pfp/Step 1: Problem Identification.html"></iframe>
   </div>
   <script>
-    document.getElementById('presentation-select').addEventListener('change', function() {
-      document.getElementById('presentation-iframe').src = this.value;
-    });
+    function loadPresentation(url) {
+      document.getElementById('presentation-iframe').src = url;
+    }
   </script>
 </body>
 </html>
