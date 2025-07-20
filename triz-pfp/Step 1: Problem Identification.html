@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Step 1: Problem Identification</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .card {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.75rem;
+            padding: 2rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        .tag {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+        .puf-tag {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+        .phf-tag {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 p-4 sm:p-8">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">Step 1: Problem Identification</h1>
+        <p class="text-lg text-gray-600 mb-8">Defining the core purpose and the primary problem of the system.</p>
+
+        <div class="card">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6 border-b pb-4">Wind Energy Harvesting System</h2>
+            
+            <ul class="space-y-6 text-base">
+                <li class="flex items-start">
+                    <svg class="w-6 h-6 text-blue-500 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+                    <span><strong>System Description:</strong> A wind farm with multiple turbines designed to capture kinetic energy from the wind and convert it into electrical energy.</span>
+                </li>
+                <li class="flex items-start">
+                    <svg class="w-6 h-6 text-blue-500 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    <span><strong>Customer Need:</strong> A reliable, efficient, and scalable system for generating clean energy from wind, while maximizing power output and minimizing operational disruptions.</span>
+                </li>
+                <li class="flex items-start">
+                    <svg class="w-6 h-6 text-blue-500 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <span><strong>Critical Challenge:</strong> The operation of an upstream turbine creates turbulent, lower-energy air flow (a "wind wake"), which negatively impacts the performance and lifespan of downstream turbines.</span>
+                </li>
+            </ul>
+
+            <div class="mt-8 pt-6 border-t grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <h3 class="text-lg font-semibold mb-2">Primary Useful Function (PUF)</h3>
+                    <p class="mb-3">The main intended purpose of the system.</p>
+                    <span class="tag puf-tag">(PUF) Wind Energy Harvesting</span>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-2">Primary Harmful Function (PHF)</h3>
+                    <p class="mb-3">The main undesirable outcome or problem.</p>
+                    <span class="tag phf-tag">[PHF] Wind Wake</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Step 4: Classify and Prioritize</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .table-container {
+            max-width: 100%;
+            overflow-x: auto;
+        }
+        th {
+            background-color: #f1f5f9;
+        }
+        .ps-col {
+            white-space: normal;
+            min-width: 300px;
+        }
+        .tag {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-weight: 500;
+            font-size: 0.75rem;
+            line-height: 1.25;
+            text-align: center;
+        }
+        .tag-contradiction { background-color: #fef2f2; color: #b91c1c; }
+        .tag-probing { background-color: #eff6ff; color: #1d4ed8; }
+        .tag-high { background-color: #fecaca; color: #991b1b; }
+        .tag-medium { background-color: #fed7aa; color: #9a3412; }
+        .tag-low { background-color: #d1fae5; color: #065f46; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 p-4 sm:p-8">
+    <div class="max-w-7xl mx-auto">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">Step 4: Classify and Prioritize</h1>
+        <p class="text-lg text-gray-600 mb-8">Classifying problems and setting priorities for the problem-solving stage.</p>
+
+        <div class="table-container bg-white border border-gray-200 rounded-lg shadow-md p-4">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-100">
+                    <tr>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Problem Statement</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Classification</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Priority</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200 text-sm">
+                    <!-- From (PUF) -->
+                    <tr><td class="px-4 py-4 ps-col">How can the overall energy capture of the wind farm be maximized?</td><td><span class="tag tag-probing">Probing Lead</span></td><td>Pass to Problem solving as a Probing Lead</td><td class="text-center"><span class="tag tag-high">High</span></td></tr>
+                    <tr><td class="px-4 py-4 ps-col">To maximize energy capture, turbines must be large and operate at high speeds, but this increases structural stress, cost, and noise.</td><td><span class="tag tag-contradiction">Contradiction</span></td><td>Pass to Problem solving as a Contradiction</td><td class="text-center"><span class="tag tag-high">High</span></td></tr>
+                    <tr><td class="px-4 py-4 ps-col">Are there alternatives to rotational turbines for harvesting wind energy on a large scale (e.g., oscillating foils, kites)?</td><td><span class="tag tag-probing">Probing Lead</span></td><td>Pass to Problem solving as a Probing Lead</td><td class="text-center"><span class="tag tag-medium">Medium</span></td></tr>
+                    <!-- From [PHF] -->
+                    <tr><td class="px-4 py-4 ps-col">How can the formation of harmful wind wake behind a turbine be prevented or minimized?</td><td><span class="tag tag-probing">Probing Lead</span></td><td>Pass to Problem solving as a Probing Lead</td><td class="text-center"><span class="tag tag-high">High</span></td></tr>
+                    <tr><td class="px-4 py-4 ps-col">Is there a way to use the energy or characteristics of the wind wake for a useful purpose (e.g., guide airflow)?</td><td><span class="tag tag-probing">Probing Lead</span></td><td>Pass to Problem solving as a Probing Lead</td><td class="text-center"><span class="tag tag-low">Low</span></td></tr>
+                    <!-- From (UF1) -->
+                    <tr><td class="px-4 py-4 ps-col">Turbine must rotate to generate power, but rotation itself causes harmful turbulence and wake.</td><td><span class="tag tag-contradiction">Contradiction</span></td><td>Pass to Problem solving as a Contradiction</td><td class="text-center"><span class="tag tag-high">High</span></td></tr>
+                    <!-- From (UF2) -->
+                    <tr><td class="px-4 py-4 ps-col">Coordination is required to manage the farm, but each turbine operating autonomously seeks to maximize its own power, creating a conflict.</td><td><span class="tag tag-contradiction">Contradiction</span></td><td>Pass to Problem solving as a Contradiction</td><td class="text-center"><span class="tag tag-high">High</span></td></tr>
+                    <!-- From (UF3) -->
+                    <tr><td class="px-4 py-4 ps-col">High wind speed is good for power generation but it causes turbine damage.</td><td><span class="tag tag-contradiction">Contradiction</span></td><td>Pass to Problem solving as a Contradiction</td><td class="text-center"><span class="tag tag-high">High</span></td></tr>
+                    <!-- From (UF6) -->
+                    <tr><td class="px-4 py-4 ps-col">Constantly adjusting yaw maximizes capture but consumes energy and causes wear.</td><td><span class="tag tag-contradiction">Contradiction</span></td><td>Pass to Problem solving as a Contradiction</td><td class="text-center"><span class="tag tag-medium">Medium</span></td></tr>
+                    <!-- From (UF9) -->
+                    <tr><td class="px-4 py-4 ps-col">The gearbox is needed to increase RPM for the generator, but it is a major source of mechanical failure and energy loss.</td><td><span class="tag tag-contradiction">Contradiction</span></td><td>Pass to Problem solving as a Contradiction</td><td class="text-center"><span class="tag tag-high">High</span></td></tr>
+                    <!-- Other Probing Leads -->
+                    <tr><td class="px-4 py-4 ps-col">What methods can be used to reduce the turbulence generated by an operating turbine?</td><td><span class="tag tag-probing">Probing Lead</span></td><td>Pass to Problem solving as a Probing Lead</td><td class="text-center"><span class="tag tag-high">High</span></td></tr>
+                    <tr><td class="px-4 py-4 ps-col">How can the coordination between turbines be optimized in real-time for maximum farm efficiency?</td><td><span class="tag tag-probing">Probing Lead</span></td><td>Pass to Problem solving as a Probing Lead</td><td class="text-center"><span class="tag tag-medium">Medium</span></td></tr>
+                    <tr><td class="px-4 py-4 ps-col">Can direct-drive generators eliminate the need for a gearbox entirely?</td><td><span class="tag tag-probing">Probing Lead</span></td><td>Pass to Problem solving as a Probing Lead</td><td class="text-center"><span class="tag tag-medium">Medium</span></td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
+

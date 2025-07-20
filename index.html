@@ -16,7 +16,7 @@
       justify-content: center;
     }
     .presentation-container {
-      width: 90vw;
+      width: 100vw;
       height: 90vh;
       background: #fff;
       box-shadow: 0 0 32px rgba(0,0,0,0.2);
@@ -27,8 +27,8 @@
       overflow: hidden;
     }
     iframe {
-      width: 100%;
-      height: 100%;
+      width: 100vw;
+      height: 90vh;
       border: none;
       border-radius: 12px;
       background: #fff;
@@ -38,9 +38,26 @@
   </style>
 </head>
 <body>
-  <button onclick="window.open('greenmu-presentation.html', '_blank')" style="position:absolute;top:24px;left:24px;z-index:10;padding:0.7em 1.2em;font-size:1em;background:#1abc9c;color:#fff;border:none;border-radius:6px;box-shadow:0 2px 8px rgba(0,0,0,0.1);cursor:pointer;">Open Presentation in New Tab</button>
-  <div class="presentation-container">
-    <iframe src="greenmu-presentation.html"></iframe>
+  <div style="position:absolute;top:24px;left:24px;z-index:10;display:flex;gap:1em;align-items:center;">
+    <button onclick="window.open(document.getElementById('presentation-select').value, '_blank')" style="padding:0.7em 1.2em;font-size:1em;background:#1abc9c;color:#fff;border:none;border-radius:6px;box-shadow:0 2px 8px rgba(0,0,0,0.1);cursor:pointer;">Open Selected in New Tab</button>
+    <select id="presentation-select" style="padding:0.5em 1em;font-size:1em;border-radius:6px;">
+      <option value="greenmu-presentation.html">GreenMU Presentation</option>
+      <option value="triz-pfp/Step 1: Problem Identification.html">TRIZ Step 1: Problem Identification</option>
+      <option value="triz-pfp/Step 2: Functional Analysis.html">TRIZ Step 2: Functional Analysis</option>
+      <option value="triz-pfp/Step 2: Key Critical Functions.html">TRIZ Step 2: Key Critical Functions</option>
+      <option value="triz-pfp/Step 3: Probing Questions & Problem Statements.html">TRIZ Step 3: Probing Questions & Problem Statements</option>
+      <option value="triz-pfp/Step 4: Classify and Prioritize.html">TRIZ Step 4: Classify and Prioritize</option>
+      <option value="triz-pfp/Section 5: CE Graph Construction.html">TRIZ Step 5: CE Graph Construction</option>
+      <option value="triz-pfp/The Complete Cause-and-Effect Graph-unconnected.html">The Complete Cause-and-Effect Graph (Unconnected)</option>
+    </select>
   </div>
+  <div class="presentation-container">
+    <iframe id="presentation-iframe" src="greenmu-presentation.html"></iframe>
+  </div>
+  <script>
+    document.getElementById('presentation-select').addEventListener('change', function() {
+      document.getElementById('presentation-iframe').src = this.value;
+    });
+  </script>
 </body>
 </html>

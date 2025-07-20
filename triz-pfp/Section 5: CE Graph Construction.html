@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Section 5: CE Graph Construction (Complete)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .node {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: black;
+            font-weight: 600;
+            width: 140px;
+            height: 140px;
+            padding: 1rem;
+            flex-shrink: 0;
+        }
+        .uf-node {
+            background-color: #dcfce7; /* light green */
+            border: 2px solid #22c55e; /* green */
+            border-radius: 50%;
+        }
+        .puf-node {
+            background-color: #ffedd5; /* light orange */
+            border: 3px solid #f97316; /* orange */
+            border-radius: 50%;
+        }
+        .hf-node {
+            background-color: #fee2e2; /* light red */
+            border: 2px solid #ef4444; /* red */
+            border-radius: 0.5rem; /* rounded corners for square */
+        }
+        .phf-node {
+            background-color: #fee2e2; /* light red */
+            border: 3px solid #f97316; /* orange */
+            border-radius: 0.5rem; /* rounded corners for square */
+        }
+        .arrow-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 1rem;
+        }
+        .arrow-label {
+            position: absolute;
+            top: -25px;
+            white-space: nowrap;
+            font-style: italic;
+            color: #4b5563;
+        }
+        .arrow {
+            width: 100px;
+            height: 4px;
+            background-color: #374151;
+            position: relative;
+        }
+        .arrow::after {
+            content: '';
+            position: absolute;
+            right: -2px;
+            top: -6px;
+            border-left: 10px solid #374151;
+            border-top: 8px solid transparent;
+            border-bottom: 8px solid transparent;
+        }
+        .eliminates-arrow {
+             width: 100px;
+            height: 4px;
+            background-color: #22c55e;
+            position: relative;
+        }
+        .eliminates-arrow::after {
+            content: '';
+            position: absolute;
+            right: -2px;
+            top: -6px;
+            border-left: 10px solid #22c55e;
+            border-top: 8px solid transparent;
+            border-bottom: 8px solid transparent;
+        }
+         .eliminates-arrow::before {
+            content: '';
+            position: absolute;
+            left: 48px;
+            top: -10px;
+            height: 24px;
+            width: 4px;
+            background-color: #22c55e;
+            transform: rotate(90deg);
+        }
+
+        /* Styles for the final diagram */
+        .final-diagram-wrapper {
+            background-color: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.75rem;
+            padding: 2rem;
+            overflow-x: auto;
+        }
+        .final-diagram-container {
+            position: relative;
+            width: 1150px;
+            height: 950px;
+        }
+        .final-node {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 10;
+        }
+        .final-label {
+            position: absolute;
+            font-style: italic;
+            font-size: 0.875rem;
+            color: #4b5563;
+            background-color: #f9fafb;
+            padding: 0 4px;
+            z-index: 6;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 p-4 sm:p-8">
+    <!-- SVG Definitions for symbols -->
+    <svg width="0" height="0" style="position:absolute">
+        <defs>
+            <symbol id="causes-symbol-square" viewBox="0 0 24 24">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2" fill="white" stroke="currentColor" stroke-width="2.5"></rect>
+                <line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="2.5"></line>
+                <line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="2.5"></line>
+            </symbol>
+            <symbol id="eliminates-symbol-circle" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="9" fill="white" stroke="currentColor" stroke-width="2.5"></circle>
+                <line x1="5" y1="12" x2="19" y2="12" stroke="currentColor" stroke-width="2.5"></line>
+            </symbol>
+            <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="8" refY="3.5" orient="auto">
+                <polygon points="0 0, 10 3.5, 0 7" fill="#3b82f6" />
+            </marker>
+        </defs>
+    </svg>
+
+    <div class="max-w-5xl mx-auto">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">Section 5: CE Graph Construction</h1>
+        <p class="text-lg text-gray-600 mb-12">Building the Cause-and-Effect diagram by applying logical questions to each function.</p>
+
+        <!-- Step 1 -->
+        <div class="bg-white p-8 rounded-lg shadow-md mb-12">
+            <h2 class="text-2xl font-semibold mb-6">Step 1: Logical Questions on (PUF)</h2>
+            <div class="flex justify-center items-center mb-8 flex-wrap">
+                <div class="text-center"><div class="node uf-node">Convert Mech to Electrical</div><div class="font-bold mt-2">(UF8)</div></div>
+                <div class="arrow-container"><div class="arrow-label">is required for</div><div class="arrow"></div></div>
+                <div class="text-center"><div class="node puf-node">Wind Energy Harvesting</div><div class="font-bold mt-2">(PUF)</div></div>
+            </div>
+            <div class="text-base text-gray-700 space-y-4">
+                <p>The first function in our graph is the PUF. The most appropriate question to ask is:</p>
+                <blockquote class="border-l-4 border-gray-300 pl-4 italic"><strong>Q4:</strong> Does (useful) function <strong>i</strong> require another (useful) function <strong>h</strong> (before)?</blockquote>
+                <p>Applying this to our problem, we find that "(PUF) Wind Energy Harvesting" requires "(UF8) Convert Mech to Electrical".</p>
+            </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="bg-white p-8 rounded-lg shadow-md mb-12">
+            <h2 class="text-2xl font-semibold mb-6">Step 2: Logical Questions on (UF8)</h2>
+            <div class="flex justify-center items-center mb-8 flex-wrap">
+                <div class="text-center"><div class="node uf-node">RPM Multipliers</div><div class="font-bold mt-2">(UF9)</div></div>
+                <div class="arrow-container"><div class="arrow-label">is required for</div><div class="arrow"></div></div>
+                <div class="text-center"><div class="node uf-node">Convert Mech to Electrical</div><div class="font-bold mt-2">(UF8)</div></div>
+            </div>
+            <div class="text-base text-gray-700 space-y-4">
+                <p>We continue by asking the logical questions for our latest function, (UF8) Convert Mech to Electrical.</p>
+                <blockquote class="border-l-4 border-gray-300 pl-4 italic"><strong>Q4:</strong> Does (useful) function <strong>i</strong> require another (useful) function <strong>h</strong> (before)?</blockquote>
+                <p>The answer is yes. To "Convert Mech to Electrical" efficiently, the system requires "(UF9) RPM Multipliers" (i.e., a gearbox) to increase the rotational speed for the generator.</p>
+            </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="bg-white p-8 rounded-lg shadow-md mb-12">
+            <h2 class="text-2xl font-semibold mb-6">Step 3: Logical Questions on (UF9)</h2>
+            <div class="flex justify-center items-center mb-8 flex-wrap">
+                <div class="text-center"><div class="node uf-node">Turbine Rotation</div><div class="font-bold mt-2">(UF1)</div></div>
+                <div class="arrow-container"><div class="arrow-label">is required for</div><div class="arrow"></div></div>
+                <div class="text-center"><div class="node uf-node">RPM Multipliers</div><div class="font-bold mt-2">(UF9)</div></div>
+            </div>
+            <div class="text-base text-gray-700 space-y-4">
+                <p>Continuing the analysis on our new function, (UF9) RPM Multipliers:</p>
+                <blockquote class="border-l-4 border-gray-300 pl-4 italic"><strong>Q4:</strong> Does (useful) function <strong>i</strong> require another (useful) function <strong>h</strong> (before)?</blockquote>
+                <p>Yes. The function "(UF9) RPM Multipliers" requires "(UF1) Turbine Rotation" to provide the initial mechanical input.</p>
+            </div>
+        </div>
+        
+        <!-- Step 4 -->
+        <div class="bg-white p-8 rounded-lg shadow-md mb-12">
+            <h2 class="text-2xl font-semibold mb-6">Step 4: Logical Questions on (UF1)</h2>
+            <div class="flex justify-center items-center mb-8 flex-wrap">
+                <div class="text-center"><div class="node uf-node">Wind Speed & Direction</div><div class="font-bold mt-2">(UF4)</div></div>
+                <div class="arrow-container"><div class="arrow-label">is required for</div><div class="arrow"></div></div>
+                <div class="text-center"><div class="node uf-node">Turbine Rotation</div><div class="font-bold mt-2">(UF1)</div></div>
+            </div>
+            <div class="text-base text-gray-700 space-y-4">
+                <p>Now considering the function (UF1) Turbine Rotation:</p>
+                <blockquote class="border-l-4 border-gray-300 pl-4 italic"><strong>Q4:</strong> Does (useful) function <strong>i</strong> require another (useful) function <strong>h</strong> (before)?</blockquote>
+                <p>Yes. For the turbine to rotate, the system first needs to know the "(UF4) Wind Speed & Direction". This function provides the necessary environmental input.</p>
+            </div>
+        </div>
+        
+        <!-- Step 5 -->
+        <div class="bg-white p-8 rounded-lg shadow-md mb-12">
+            <h2 class="text-2xl font-semibold mb-6">Step 5: Logical Questions on (UF4)</h2>
+            <div class="flex flex-col items-center mb-8">
+                <div class="text-center"><div class="node uf-node">Wind Speed & Direction</div><div class="font-bold mt-2">(UF4)</div></div>
+                <div class="my-4 relative"><div class="absolute right-full mr-2 top-1/2 -translate-y-1/2 italic text-gray-600">causes</div><div class="w-1 h-20 bg-red-500 relative"><div class="absolute -bottom-2 left-1/2 -translate-x-1/2 w-0 h-0" style="border-left: 8px solid transparent; border-right: 8px solid transparent; border-top: 10px solid #ef4444;"></div><div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"><svg class="w-6 h-6 text-red-500"><use xlink:href="#causes-symbol-square"/></svg></div></div></div>
+                <div class="text-center"><div class="node hf-node">Turbulence</div><div class="font-bold mt-2">[HF3]</div></div>
+            </div>
+            <div class="text-base text-gray-700 space-y-4">
+                <p>Considering our new useful function, (UF4) Wind Speed & Direction, we find an affirmative answer to Question 2:</p>
+                <blockquote class="border-l-4 border-gray-300 pl-4 italic"><strong>Q2:</strong> Does (useful) function <strong>i</strong> cause any [harmful] function <strong>j</strong>?</blockquote>
+                <p>Yes. The initial airflow, described by "(UF4) Wind Speed & Direction", is the direct cause of "[HF3] Turbulence" when it interacts with the turbine structure.</p>
+            </div>
+        </div>
+
+        <!-- Step 6 -->
+        <div class="bg-white p-8 rounded-lg shadow-md mb-12">
+            <h2 class="text-2xl font-semibold mb-6">Step 6: Logical Questions on [HF3]</h2>
+            <div class="flex flex-col items-center mb-8">
+                <div class="text-center"><div class="node hf-node">Turbulence</div><div class="font-bold mt-2">[HF3]</div></div>
+                <div class="my-4 relative"><div class="absolute right-full mr-2 top-1/2 -translate-y-1/2 italic text-gray-600">causes</div><div class="w-1 h-20 bg-red-500 relative"><div class="absolute -bottom-2 left-1/2 -translate-x-1/2 w-0 h-0" style="border-left: 8px solid transparent; border-right: 8px solid transparent; border-top: 10px solid #ef4444;"></div><div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"><svg class="w-6 h-6 text-red-500"><use xlink:href="#causes-symbol-square"/></svg></div></div></div>
+                <div class="text-center"><div class="node phf-node">Wind Wake</div><div class="font-bold mt-2">[PHF]</div></div>
+            </div>
+            <div class="text-base text-gray-700 space-y-4">
+                <p>Now we analyze the harmful function [HF3] Turbulence using the appropriate set of questions (Q5-Q8).</p>
+                <blockquote class="border-l-4 border-gray-300 pl-4 italic"><strong>Q5:</strong> Does [harmful] function <strong>i</strong> cause another [harmful] function <strong>j</strong>?</blockquote>
+                <p>Yes. The "[HF3] Turbulence" directly causes the "[PHF] Wind Wake", which is the primary harmful function of our system. This completes a major causal chain from the initial conditions to the primary problem.</p>
+            </div>
+        </div>
+
+        <!-- Step 7 -->
+        <div class="bg-white p-8 rounded-lg shadow-md mb-12">
+            <h2 class="text-2xl font-semibold mb-6">Step 7: Further Questions on (UF1)</h2>
+            <div class="flex flex-col items-center mb-8">
+                <div class="text-center"><div class="node uf-node">Turbine Rotation</div><div class="font-bold mt-2">(UF1)</div></div>
+                <div class="my-4 relative"><div class="absolute right-full mr-2 top-1/2 -translate-y-1/2 italic text-gray-600">causes</div><div class="w-1 h-20 bg-red-500 relative"><div class="absolute -bottom-2 left-1/2 -translate-x-1/2 w-0 h-0" style="border-left: 8px solid transparent; border-right: 8px solid transparent; border-top: 10px solid #ef4444;"></div><div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"><svg class="w-6 h-6 text-red-500"><use xlink:href="#causes-symbol-square"/></svg></div></div></div>
+                <div class="text-center"><div class="node hf-node">Slow Wind</div><div class="font-bold mt-2">[HF2]</div></div>
+            </div>
+            <div class="text-base text-gray-700 space-y-4">
+                <p>Functions can have multiple effects. Probing (UF1) Turbine Rotation again with Question 2 reveals another harmful effect:</p>
+                <blockquote class="border-l-4 border-gray-300 pl-4 italic"><strong>Q2:</strong> Does (useful) function <strong>i</strong> cause any [harmful] function <strong>j</strong>?</blockquote>
+                <p>Yes. As the turbine rotates and extracts energy from the wind, it inherently causes the wind behind it to slow down. This creates the harmful function "[HF2] Slow Wind".</p>
+            </div>
+        </div>
+
+        <!-- Step 8 -->
+        <div class="bg-white p-8 rounded-lg shadow-md mb-12">
+            <h2 class="text-2xl font-semibold mb-6">Step 8: Logical Questions on [HF2]</h2>
+            <div class="flex flex-col items-center mb-8">
+                <div class="text-center"><div class="node phf-node">Wind Wake</div><div class="font-bold mt-2">[PHF]</div></div>
+                <div class="my-4 relative"><div class="absolute right-full mr-2 top-1/2 -translate-y-1/2 italic text-gray-600">causes</div><div class="w-1 h-20 bg-red-500 relative"><div class="absolute -bottom-2 left-1/2 -translate-x-1/2 w-0 h-0" style="border-left: 8px solid transparent; border-right: 8px solid transparent; border-top: 10px solid #ef4444;"></div><div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"><svg class="w-6 h-6 text-red-500"><use xlink:href="#causes-symbol-square"/></svg></div></div></div>
+                <div class="text-center"><div class="node hf-node">Slow Wind</div><div class="font-bold mt-2">[HF2]</div></div>
+            </div>
+            <div class="text-base text-gray-700 space-y-4">
+                <p>We now analyze the harmful function [HF2] Slow Wind.</p>
+                <blockquote class="border-l-4 border-gray-300 pl-4 italic"><strong>Q6:</strong> Is [harmful] function <strong>i</strong> caused by another [harmful] function <strong>j</strong>?</blockquote>
+                <p>Yes. The "[PHF] Wind Wake" is a complex phenomenon that includes both turbulence and reduced wind speed. Therefore, the "[HF2] Slow Wind" is directly caused by the "[PHF] Wind Wake". This reinforces the link between the primary problem and its effects.</p>
+            </div>
+        </div>
+        
+        <!-- Step 9 -->
+        <div class="bg-white p-8 rounded-lg shadow-md mb-12">
+            <h2 class="text-2xl font-semibold mb-6">Step 9: Logical Questions on (UF3)</h2>
+            <div class="flex flex-col items-center mb-8">
+                <div class="text-center"><div class="node uf-node">High Wind Speed</div><div class="font-bold mt-2">(UF3)</div></div>
+                <div class="my-4 relative"><div class="absolute right-full mr-2 top-1/2 -translate-y-1/2 italic text-gray-600">causes</div><div class="w-1 h-20 bg-red-500 relative"><div class="absolute -bottom-2 left-1/2 -translate-x-1/2 w-0 h-0" style="border-left: 8px solid transparent; border-right: 8px solid transparent; border-top: 10px solid #ef4444;"></div><div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"><svg class="w-6 h-6 text-red-500"><use xlink:href="#causes-symbol-square"/></svg></div></div></div>
+                <div class="text-center"><div class="node hf-node">Turbine Damage</div><div class="font-bold mt-2">[HF5]</div></div>
+            </div>
+            <div class="text-base text-gray-700 space-y-4">
+                <p>We now consider another aspect of the wind condition, (UF3) High Wind Speed, which also stems from the general function (UF4).</p>
+                <blockquote class="border-l-4 border-gray-300 pl-4 italic"><strong>Q2:</strong> Does (useful) function <strong>i</strong> cause any [harmful] function <strong>j</strong>?</blockquote>
+                <p>Yes. While high wind has the potential for more power, it directly causes "[HF5] Turbine Damage" due to excessive mechanical stress.</p>
+            </div>
+        </div>
+
+        <!-- Step 10 -->
+        <div class="bg-white p-8 rounded-lg shadow-md mb-12">
+            <h2 class="text-2xl font-semibold mb-6">Step 10: Logical Questions on [HF4]</h2>
+            <div class="flex justify-center items-center mb-8 flex-wrap">
+                <div class="text-center"><div class="node uf-node">Turbine Op. Coordination</div><div class="font-bold mt-2">(UF2)</div></div>
+                <div class="arrow-container"><div class="arrow-label">eliminates</div><div class="eliminates-arrow"></div></div>
+                <div class="text-center"><div class="node hf-node">Autonomous Turbine</div><div class="font-bold mt-2">[HF4]</div></div>
+            </div>
+            <div class="text-base text-gray-700 space-y-4">
+                <p>We now consider the harmful function of turbines operating without coordination, [HF4] Autonomous Turbine.</p>
+                <blockquote class="border-l-4 border-gray-300 pl-4 italic"><strong>Q8:</strong> Was (useful) function <strong>h</strong> introduced to eliminate [harmful] function <strong>i</strong>?</blockquote>
+                <p>Yes. To combat the negative effects of uncoordinated operation (like increased turbulence and inefficient energy capture), the useful function "(UF2) Turbine Op. Coordination" is introduced into the system.</p>
+            </div>
+        </div>
+
+        <!-- Step 11 -->
+        <div class="bg-white p-8 rounded-lg shadow-md mb-12">
+            <h2 class="text-2xl font-semibold mb-6">Step 11: Logical Questions on (UF2)</h2>
+            <div class="flex justify-center items-center mb-8 flex-wrap">
+                <div class="text-center"><div class="node uf-node">Turbine Management</div><div class="font-bold mt-2">(UF5)</div></div>
+                <div class="arrow-container"><div class="arrow-label">is required for</div><div class="arrow"></div></div>
+                <div class="text-center"><div class="node uf-node">Turbine Op. Coordination</div><div class="font-bold mt-2">(UF2)</div></div>
+            </div>
+            <div class="text-base text-gray-700 space-y-4">
+                <p>We continue the analysis with our new useful function, (UF2) Turbine Op. Coordination.</p>
+                <blockquote class="border-l-4 border-gray-300 pl-4 italic"><strong>Q4:</strong> Does (useful) function <strong>i</strong> require another (useful) function <strong>h</strong> (before)?</blockquote>
+                <p>Yes. In order to coordinate the turbines, a higher-level "(UF5) Turbine Management" system is required.</p>
+            </div>
+        </div>
+
+        <!-- Step 12 -->
+        <div class="bg-white p-8 rounded-lg shadow-md mb-12">
+            <h2 class="text-2xl font-semibold mb-6">Step 12: Logical Questions on (UF5)</h2>
+            <div class="flex justify-center items-center mb-8 flex-wrap">
+                <div class="text-center"><div class="node uf-node">Control Blade Yaw</div><div class="font-bold mt-2">(UF6)</div></div>
+                <div class="arrow-container"><div class="arrow-label">is required for</div><div class="arrow"></div></div>
+                <div class="text-center"><div class="node uf-node">Turbine Management</div><div class="font-bold mt-2">(UF5)</div></div>
+            </div>
+            <div class="text-base text-gray-700 space-y-4">
+                <p>Finally, we analyze our newest function, (UF5) Turbine Management.</p>
+                <blockquote class="border-l-4 border-gray-300 pl-4 italic"><strong>Q4:</strong> Does (useful) function <strong>i</strong> require another (useful) function <strong>h</strong> (before)?</blockquote>
+                <p>Yes. For the management system to execute its coordination strategy, it requires the ability to "(UF6) Control Blade Yaw". This function allows the system to actively change how a turbine interacts with the wind.</p>
+                <p>With this step, all functions from our initial list have been placed on the diagram, completing the causal network.</p>
+            </div>
+        </div>
+
+        <!-- Final Diagram -->
+        <div class="bg-white p-8 rounded-lg shadow-md">
+            <h2 class="text-2xl font-semibold mb-6">The Complete Cause-and-Effect Graph</h2>
+            <div class="final-diagram-wrapper">
+                <div class="final-diagram-container">
+                    <!-- SVG Lines and Symbols -->
+                    <svg class="absolute top-0 left-0 w-full h-full" style="z-index: 5;">
+                        <!-- Horizontal Arrows -->
+                        <line x1="1040" y1="90" x2="920" y2="90" stroke="#3b82f6" stroke-width="3" marker-end="url(#arrowhead)" />
+                        <line x1="850" y1="90" x2="730" y2="90" stroke="#3b82f6" stroke-width="3" marker-end="url(#arrowhead)" />
+                        <line x1="660" y1="90" x2="540" y2="90" stroke="#3b82f6" stroke-width="3" marker-end="url(#arrowhead)" />
+                        <line x1="470" y1="90" x2="350" y2="90" stroke="#3b82f6" stroke-width="3" marker-end="url(#arrowhead)" />
+                        <line x1="280" y1="90" x2="160" y2="90" stroke="#3b82f6" stroke-width="3" marker-end="url(#arrowhead)" />
+                        <line x1="470" y1="310" x2="350" y2="310" stroke="#3b82f6" stroke-width="3" marker-end="url(#arrowhead)" />
+                        <line x1="660" y1="310" x2="540" y2="310" stroke="#3b82f6" stroke-width="3" marker-end="url(#arrowhead)" />
+                        <line x1="850" y1="530" x2="730" y2="530" stroke="#3b82f6" stroke-width="3" marker-end="url(#arrowhead)" />
+                        <!-- Vertical Arrows -->
+                        <line x1="505" y1="160" x2="505" y2="240" stroke="#3b82f6" stroke-width="3" marker-end="url(#arrowhead)" />
+                        <line x1="505" y1="380" x2="505" y2="460" stroke="#3b82f6" stroke-width="3" marker-end="url(#arrowhead)" />
+                        <line x1="505" y1="590" x2="505" y2="670" stroke="#3b82f6" stroke-width="3" marker-end="url(#arrowhead)" />
+                        <line x1="90" y1="160" x2="90" y2="240" stroke="#3b82f6" stroke-width="3" marker-end="url(#arrowhead)" />
+                        <line x1="90" y1="380" x2="90" y2="460" stroke="#3b82f6" stroke-width="3" marker-end="url(#arrowhead)" />
+                        <line x1="280" y1="310" x2="160" y2="310" stroke="#3b82f6" stroke-width="3" marker-end="url(#arrowhead)" />
+                        <line x1="850" y1="160" x2="850" y2="240" stroke="#3b82f6" stroke-width="3" marker-end="url(#arrowhead)" />
+                        <line x1="850" y1="380" x2="850" y2="460" stroke="#3b82f6" stroke-width="3" marker-end="url(#arrowhead)" />
+                        <!-- Complex Path Arrows -->
+                        <polyline points="1040,130 1090,130 1090,490 920,490" stroke="#3b82f6" stroke-width="3" fill="none" marker-end="url(#arrowhead)" />
+                        <!-- Symbols -->
+                        <svg x="491" y="245" width="28" height="28" class="text-red-500"><use xlink:href="#causes-symbol-square"/></svg>
+                        <svg x="491" y="465" width="28" height="28" class="text-red-500"><use xlink:href="#causes-symbol-square"/></svg>
+                        <svg x="491" y="675" width="28" height="28" class="text-red-500"><use xlink:href="#causes-symbol-square"/></svg>
+                        <svg x="836" y="245" width="28" height="28" class="text-red-500"><use xlink:href="#causes-symbol-square"/></svg>
+                        <svg x="76" y="245" width="28" height="28" class="text-green-500"><use xlink:href="#eliminates-symbol-circle"/></svg>
+                    </svg>
+
+                    <!-- Nodes -->
+                    <div class="final-node" style="left: 970px; top: 20px;"><div class="node puf-node">Wind Energy Harvesting</div><div class="font-bold mt-2">(PUF)</div></div>
+                    <div class="final-node" style="left: 780px; top: 20px;"><div class="node uf-node">Convert Mech to Electrical</div><div class="font-bold mt-2">(UF8)</div></div>
+                    <div class="final-node" style="left: 590px; top: 20px;"><div class="node uf-node">RPM Multipliers</div><div class="font-bold mt-2">(UF9)</div></div>
+                    <div class="final-node" style="left: 400px; top: 20px;"><div class="node uf-node">Turbine Rotation</div><div class="font-bold mt-2">(UF1)</div></div>
+                    <div class="final-node" style="left: 210px; top: 20px;"><div class="node uf-node">Control Blade Yaw</div><div class="font-bold mt-2">(UF6)</div></div>
+                    <div class="final-node" style="left: 20px; top: 20px;"><div class="node uf-node">Turbine Management</div><div class="font-bold mt-2">(UF5)</div></div>
+                    <div class="final-node" style="left: 20px; top: 240px;"><div class="node uf-node">Turbine Op. Coordination</div><div class="font-bold mt-2">(UF2)</div></div>
+                    <div class="final-node" style="left: 210px; top: 240px;"><div class="node hf-node">Autonomous Turbine</div><div class="font-bold mt-2">[HF4]</div></div>
+                    <div class="final-node" style="left: 400px; top: 240px;"><div class="node hf-node">Slow Wind</div><div class="font-bold mt-2">[HF2]</div></div>
+                    <div class="final-node" style="left: 590px; top: 240px;"><div class="node phf-node">Wind Wake</div><div class="font-bold mt-2">[PHF]</div></div>
+                    <div class="final-node" style="left: 400px; top: 460px;"><div class="node hf-node">Turbulence</div><div class="font-bold mt-2">[HF3]</div></div>
+                    <div class="final-node" style="left: 400px; top: 670px;"><div class="node uf-node">Wind Speed & Direction</div><div class="font-bold mt-2">(UF4)</div></div>
+                    <div class="final-node" style="left: 780px; top: 240px;"><div class="node uf-node">High Wind Speed</div><div class="font-bold mt-2">(UF3)</div></div>
+                    <div class="final-node" style="left: 780px; top: 460px;"><div class="node hf-node">Turbine Damage</div><div class="font-bold mt-2">[HF5]</div></div>
+                    
+                    <!-- Labels -->
+                    <div class="final-label" style="left: 925px; top: 78px;">is required for</div>
+                    <div class="final-label" style="left: 735px; top: 78px;">is required for</div>
+                    <div class="final-label" style="left: 545px; top: 78px;">is required for</div>
+                    <div class="final-label" style="left: 355px; top: 78px;">is required for</div>
+                    <div class="final-label" style="left: 165px; top: 78px;">is required for</div>
+                    <div class="final-label" style="left: 355px; top: 298px;">causes</div>
+                    <div class="final-label" style="left: 545px; top: 298px;">causes</div>
+                    <div class="final-label" style="left: 735px; top: 518px;">causes</div>
+                    <div class="final-label" style="left: 515px; top: 195px;">causes</div>
+                    <div class="final-label" style="left: 515px; top: 415px;">causes</div>
+                    <div class="final-label" style="left: 515px; top: 625px;">causes</div>
+                    <div class="final-label" style="left: 100px; top: 195px;">is required for</div>
+                    <div class="final-label" style="left: 100px; top: 415px;">is required for</div>
+                    <div class="final-label" style="left: 165px; top: 298px;">eliminates</div>
+                    <div class="final-label" style="left: 860px; top: 195px;">causes</div>
+                    <div class="final-label" style="left: 860px; top: 415px;">causes</div>
+                    <div class="final-label" style="left: 1095px; top: 295px;">eliminates</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

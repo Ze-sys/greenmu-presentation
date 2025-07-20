@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Step 3: Probing Questions & Problem Statements</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .table-container {
+            max-width: 100%;
+            overflow-x: auto;
+        }
+        th {
+            background-color: #f1f5f9;
+        }
+        .function-id {
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        .uf-id { color: #166534; }
+        .puf-id { color: #92400e; }
+        .hf-id { color: #991b1b; }
+        .phf-id { color: #7f1d1d; }
+        .ps-col {
+            white-space: normal;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 p-4 sm:p-8">
+    <div class="max-w-7xl mx-auto">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">Step 3: Problems to Solve</h1>
+        <p class="text-lg text-gray-600 mb-8">Probing each function to generate problem statements.</p>
+
+        <div class="table-container bg-white border border-gray-200 rounded-lg shadow-md p-4">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-100">
+                    <tr>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Function ID</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Probing Question (PS#)</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Problem Statement</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200 text-sm">
+                    <!-- PUF -->
+                    <tr>
+                        <td rowspan="3" class="px-4 py-4 function-id puf-id">(PUF)</td>
+                        <td rowspan="3" class="px-4 py-4">Wind Energy Harvesting</td>
+                        <td class="px-4 py-4 ps-col">PS1: Find a way to enhance the function.</td>
+                        <td class="px-4 py-4 ps-col">How can the overall energy capture of the wind farm be maximized?</td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-4 ps-col">PS2: Find a way to resolve a contradiction.</td>
+                        <td class="px-4 py-4 ps-col">To maximize energy capture, turbines must be large and operate at high speeds, but this increases structural stress, cost, and noise.</td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-4 ps-col">PS3: Find an alternative way to deliver the function.</td>
+                        <td class="px-4 py-4 ps-col">Are there alternatives to rotational turbines for harvesting wind energy on a large scale (e.g., oscillating foils, kites)?</td>
+                    </tr>
+
+                    <!-- PHF -->
+                    <tr>
+                        <td rowspan="2" class="px-4 py-4 function-id phf-id">[PHF]</td>
+                        <td rowspan="2" class="px-4 py-4">Wind Wake</td>
+                        <td class="px-4 py-4 ps-col">PS4: Find a way to eliminate, reduce or prevent the harmful function.</td>
+                        <td class="px-4 py-4 ps-col">How can the formation of harmful wind wake behind a turbine be prevented or minimized?</td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-4 ps-col">PS5: Find a way to benefit from the harmful function.</td>
+                        <td class="px-4 py-4 ps-col">Is there a way to use the energy or characteristics of the wind wake for a useful purpose (e.g., guide airflow)?</td>
+                    </tr>
+                    
+                    <!-- All HFs -->
+                    <tr><td rowspan="2" class="px-4 py-4 function-id hf-id">[HF2]</td><td rowspan="2" class="px-4 py-4">Slow Wind</td><td class="px-4 py-4 ps-col">PS4</td><td class="px-4 py-4 ps-col">How can the impact of slow wind on downstream turbines be mitigated?</td></tr>
+                    <tr><td class="px-4 py-4 ps-col">PS5</td><td class="px-4 py-4 ps-col">Can the slow wind area be used for a different, beneficial purpose?</td></tr>
+                    <tr><td rowspan="2" class="px-4 py-4 function-id hf-id">[HF3]</td><td rowspan="2" class="px-4 py-4">Turbulence</td><td class="px-4 py-4 ps-col">PS4</td><td class="px-4 py-4 ps-col">What methods can be used to reduce the turbulence generated by an operating turbine?</td></tr>
+                    <tr><td class="px-4 py-4 ps-col">PS5</td><td class="px-4 py-4 ps-col">Could the turbulent airflow be harnessed or redirected for a positive outcome?</td></tr>
+                    <tr><td rowspan="2" class="px-4 py-4 function-id hf-id">[HF4]</td><td rowspan="2" class="px-4 py-4">Autonomous Turbine</td><td class="px-4 py-4 ps-col">PS4</td><td class="px-4 py-4 ps-col">How can the negative effects of a turbine operating autonomously (without coordination) be prevented?</td></tr>
+                    <tr><td class="px-4 py-4 ps-col">PS5</td><td class="px-4 py-4 ps-col">Are there scenarios where a turbine operating autonomously is beneficial to the system?</td></tr>
+                    <tr><td rowspan="2" class="px-4 py-4 function-id hf-id">[HF5]</td><td rowspan="2" class="px-4 py-4">Turbine Damage</td><td class="px-4 py-4 ps-col">PS4</td><td class="px-4 py-4 ps-col">What technologies or strategies can prevent turbine damage from high wind speeds?</td></tr>
+                    <tr><td class="px-4 py-4 ps-col">PS5</td><td class="px-4 py-4 ps-col">Can the detection of conditions that cause turbine damage be used to trigger a useful secondary function?</td></tr>
+
+                    <!-- All UFs -->
+                    <tr><td rowspan="3" class="px-4 py-4 function-id uf-id">(UF1)</td><td rowspan="3" class="px-4 py-4">Turbine Rotation</td><td class="px-4 py-4 ps-col">PS1</td><td class="px-4 py-4 ps-col">How can turbine rotation be made more efficient at various wind speeds?</td></tr>
+                    <tr><td class="px-4 py-4 ps-col">PS2</td><td class="px-4 py-4 ps-col">Turbine must rotate to generate power, but rotation itself causes harmful turbulence and wake.</td></tr>
+                    <tr><td class="px-4 py-4 ps-col">PS3</td><td class="px-4 py-4 ps-col">What are alternative ways to capture kinetic energy from wind without large rotating blades?</td></tr>
+                    <tr><td rowspan="3" class="px-4 py-4 function-id uf-id">(UF2)</td><td rowspan="3" class="px-4 py-4">Turbine Op. Coordination</td><td class="px-4 py-4 ps-col">PS1</td><td class="px-4 py-4 ps-col">How can the coordination between turbines be optimized in real-time for maximum farm efficiency?</td></tr>
+                    <tr><td class="px-4 py-4 ps-col">PS2</td><td class="px-4 py-4 ps-col">Coordination is required to manage the farm, but each turbine operating autonomously seeks to maximize its own power, creating a conflict.</td></tr>
+                    <tr><td class="px-4 py-4 ps-col">PS3</td><td class="px-4 py-4 ps-col">Are there decentralized or passive methods to achieve farm-level coordination without active control?</td></tr>
+                    <tr><td rowspan="3" class="px-4 py-4 function-id uf-id">(UF3)</td><td rowspan="3" class="px-4 py-4">High Wind Speed</td><td class="px-4 py-4 ps-col">PS1</td><td class="px-4 py-4 ps-col">How can the system better utilize periods of high wind speed safely?</td></tr>
+                    <tr><td class="px-4 py-4 ps-col">PS2</td><td class="px-4 py-4 ps-col">High wind speed is good for power generation but it causes turbine damage.</td></tr>
+                    <tr><td class="px-4 py-4 ps-col">PS3</td><td class="px-4 py-4 ps-col">Can we store kinetic energy from gusts without over-stressing the turbine?</td></tr>
+                    <tr><td rowspan="3" class="px-4 py-4 function-id uf-id">(UF4)</td><td rowspan="3" class="px-4 py-4">Wind Speed & Direction</td><td class="px-4 py-4 ps-col">PS1</td><td class="px-4 py-4 ps-col">How can the measurement of wind speed/direction be more accurate and predictive?</td></tr>
+                    <tr><td class="px-4 py-4 ps-col">PS2</td><td class="px-4 py-4 ps-col">To accurately measure wind, sensors must be upstream, but this can create minor turbulence.</td></tr>
+                    <tr><td class="px-4 py-4 ps-col">PS3</td><td class="px-4 py-4 ps-col">Can we use remote sensing (LiDAR) or airflow models instead of local anemometers?</td></tr>
+                    <tr><td rowspan="3" class="px-4 py-4 function-id uf-id">(UF5)</td><td rowspan="3" class="px-4 py-4">Turbine Management</td><td class="px-4 py-4 ps-col">PS1</td><td class="px-4 py-4 ps-col">How can the management system react faster to changing conditions?</td></tr>
+                    <tr><td class="px-4 py-4 ps-col">PS2</td><td class="px-4 py-4 ps-col">Centralized management offers optimal control but creates a single point of failure.</td></tr>
+                    <tr><td class="px-4 py-4 ps-col">PS3</td><td class="px-4 py-4 ps-col">Can turbines use swarm intelligence to self-organize and manage the farm?</td></tr>
+                    <tr><td rowspan="3" class="px-4 py-4 function-id uf-id">(UF6)</td><td rowspan="3" class="px-4 py-4">Control Blade Yaw</td><td class="px-4 py-4 ps-col">PS1</td><td class="px-4 py-4 ps-col">How can yaw control be more precise and energy-efficient?</td></tr>
+                    <tr><td class="px-4 py-4 ps-col">PS2</td><td class="px-4 py-4 ps-col">Constantly adjusting yaw maximizes capture but consumes energy and causes wear.</td></tr>
+                    <tr><td class="px-4 py-4 ps-col">PS3</td><td class="px-4 py-4 ps-col">Are there blade designs less sensitive to wind direction, reducing the need for yaw?</td></tr>
+                    <tr><td rowspan="3" class="px-4 py-4 function-id uf-id">(UF8)</td><td rowspan="3" class="px-4 py-4">Convert Mech to Electrical</td><td class="px-4 py-4 ps-col">PS1</td><td class="px-4 py-4 ps-col">How can the efficiency of the generator and power electronics be improved?</td></tr>
+                    <tr><td class="px-4 py-4 ps-col">PS2</td><td class="px-4 py-4 ps-col">Higher efficiency generators are often heavier and more expensive.</td></tr>
+                    <tr><td class="px-4 py-4 ps-col">PS3</td><td class="px-4 py-4 ps-col">Are there direct-drive systems that offer better performance?</td></tr>
+                    <tr><td rowspan="3" class="px-4 py-4 function-id uf-id">(UF9)</td><td rowspan="3" class="px-4 py-4">RPM Multipliers</td><td class="px-4 py-4 ps-col">PS1</td><td class="px-4 py-4 ps-col">How can the gearbox be made more reliable and require less maintenance?</td></tr>
+                    <tr><td class="px-4 py-4 ps-col">PS2</td><td class="px-4 py-4 ps-col">The gearbox is needed to increase RPM for the generator, but it is a major source of mechanical failure and energy loss.</td></tr>
+                    <tr><td class="px-4 py-4 ps-col">PS3</td><td class="px-4 py-4 ps-col">Can direct-drive generators eliminate the need for a gearbox entirely?</td></tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
+

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Step 2: Functional Analysis</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .table-container {
+            max-width: 100%;
+            overflow-x: auto;
+        }
+        th {
+            background-color: #f1f5f9;
+            white-space: nowrap;
+        }
+        td {
+            white-space: nowrap;
+        }
+        .link-symbol {
+            font-size: 1.25rem;
+            line-height: 1;
+            font-weight: bold;
+            color: #3b82f6;
+            display: inline-flex;
+            align-items: center;
+            gap: 0; /* Removed gap */
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 p-4 sm:p-8">
+    <div class="max-w-7xl mx-auto">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">Step 2: Functional Analysis</h1>
+        <p class="text-lg text-gray-600 mb-8">Mapping the cause-and-effect relationships between system functions.</p>
+
+        <div class="table-container bg-white border border-gray-200 rounded-lg shadow-md p-4">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-100">
+                    <tr>
+                        <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Function ID and type</th>
+                        <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
+                        <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Discovered via Logical Q#</th>
+                        <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Link</th>
+                        <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                        <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Linked To (Function ID)</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200 text-sm">
+                    <!-- SVG icon for "causes" symbol (Square) -->
+                    <svg width="0" height="0" style="position:absolute">
+                        <defs>
+                            <symbol id="causes-symbol-square" viewBox="0 0 16 16">
+                                <rect x="2" y="2" width="12" height="12" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                                <line x1="4.5" y1="4.5" x2="11.5" y2="11.5" stroke="currentColor" stroke-width="1.5"/>
+                                <line x1="11.5" y1="4.5" x2="4.5" y2="11.5" stroke="currentColor" stroke-width="1.5"/>
+                            </symbol>
+                        </defs>
+                    </svg>
+                    <!-- PUF -->
+                    <tr>
+                        <td class="px-3 py-3 font-bold text-orange-600">(PUF)</td>
+                        <td class="px-3 py-3">Wind Energy Harvesting</td>
+                        <td class="px-3 py-3">Q4: UF requires another UF before</td>
+                        <td class="px-3 py-3 text-center"><span class="link-symbol">&larr;</span></td>
+                        <td class="px-3 py-3">UF</td>
+                        <td class="px-3 py-3">(UF8)</td>
+                    </tr>
+                    <!-- UF1 -->
+                    <tr>
+                        <td rowspan="3" class="px-3 py-3">(UF1)</td>
+                        <td rowspan="3" class="px-3 py-3">Turbine Rotation</td>
+                        <td class="px-3 py-3">Q1: UF is required for another UF</td>
+                        <td class="px-3 py-3 text-center"><span class="link-symbol">&rarr;</span></td>
+                        <td class="px-3 py-3">UF</td>
+                        <td class="px-3 py-3">(UF9)</td>
+                    </tr>
+                    <tr>
+                        <td class="px-3 py-3">Q4: UF requires another UF before</td>
+                        <td class="px-3 py-3 text-center"><span class="link-symbol">&larr;</span></td>
+                        <td class="px-3 py-3">UF</td>
+                        <td class="px-3 py-3">(UF4)</td>
+                    </tr>
+                     <tr>
+                        <td class="px-3 py-3">Q7: HF is caused by a UF (inversely)</td>
+                        <td class="px-3 py-3 text-center"><span class="link-symbol">&larr;<svg width="1em" height="1em"><use xlink:href="#causes-symbol-square"/></svg></span></td>
+                        <td class="px-3 py-3">HF</td>
+                        <td class="px-3 py-3">[HF2]</td>
+                    </tr>
+                    <!-- UF2 -->
+                    <tr>
+                        <td rowspan="2" class="px-3 py-3">(UF2)</td>
+                        <td rowspan="2" class="px-3 py-3">Turbine Op. Coordination</td>
+                        <td class="px-3 py-3">Q1: UF is required for another UF</td>
+                        <td class="px-3 py-3 text-center"><span class="link-symbol">&rarr;</span></td>
+                        <td class="px-3 py-3">UF</td>
+                        <td class="px-3 py-3">(UF5)</td>
+                    </tr>
+                    <tr>
+                        <td class="px-3 py-3">Q3: UF used to eliminate HF</td>
+                        <td class="px-3 py-3 text-center"><span class="link-symbol">&#x25CB;&rarr;</span></td>
+                        <td class="px-3 py-3">HF</td>
+                        <td class="px-3 py-3">[HF4]</td>
+                    </tr>
+                    <!-- UF3 -->
+                    <tr>
+                        <td class="px-3 py-3">(UF3)</td>
+                        <td class="px-3 py-3">High Wind Speed</td>
+                        <td class="px-3 py-3">Q2: UF causes an HF</td>
+                        <td class="px-3 py-3 text-center"><span class="link-symbol"><svg width="1em" height="1em"><use xlink:href="#causes-symbol-square"/></svg>&rarr;</span></td>
+                        <td class="px-3 py-3">HF</td>
+                        <td class="px-3 py-3">[HF5]</td>
+                    </tr>
+                    <!-- UF4 -->
+                     <tr>
+                        <td class="px-3 py-3">(UF4)</td>
+                        <td class="px-3 py-3">Wind Speed & Direction</td>
+                        <td class="px-3 py-3">Q2: UF causes an HF</td>
+                        <td class="px-3 py-3 text-center"><span class="link-symbol"><svg width="1em" height="1em"><use xlink:href="#causes-symbol-square"/></svg>&rarr;</span></td>
+                        <td class="px-3 py-3">HF</td>
+                        <td class="px-3 py-3">[HF3]</td>
+                    </tr>
+                    <!-- UF5 -->
+                    <tr>
+                        <td class="px-3 py-3">(UF5)</td>
+                        <td class="px-3 py-3">Turbine Management</td>
+                        <td class="px-3 py-3">Q1: UF is required for another UF</td>
+                        <td class="px-3 py-3 text-center"><span class="link-symbol">&rarr;</span></td>
+                        <td class="px-3 py-3">UF</td>
+                        <td class="px-3 py-3">(UF6)</td>
+                    </tr>
+                    <!-- UF8 -->
+                    <tr>
+                        <td class="px-3 py-3">(UF8)</td>
+                        <td class="px-3 py-3">Convert Mech to Electrical</td>
+                        <td class="px-3 py-3">Q4: UF requires another UF before</td>
+                        <td class="px-3 py-3 text-center"><span class="link-symbol">&larr;</span></td>
+                        <td class="px-3 py-3">UF</td>
+                        <td class="px-3 py-3">(UF9)</td>
+                    </tr>
+                    <!-- PHF -->
+                    <tr>
+                        <td class="px-3 py-3 font-bold text-red-600">[PHF]</td>
+                        <td class="px-3 py-3">Wind Wake</td>
+                        <td class="px-3 py-3">Q6: HF is caused by another HF</td>
+                        <td class="px-3 py-3 text-center"><span class="link-symbol">&larr;&#x25CB;</span></td>
+                        <td class="px-3 py-3">HF</td>
+                        <td class="px-3 py-3">[HF3]</td>
+                    </tr>
+                    <!-- HF2 -->
+                    <tr>
+                        <td class="px-3 py-3">[HF2]</td>
+                        <td class="px-3 py-3">Slow Wind</td>
+                        <td class="px-3 py-3">Q6: HF is caused by another HF</td>
+                        <td class="px-3 py-3 text-center"><span class="link-symbol">&larr;&#x25CB;</span></td>
+                        <td class="px-3 py-3">PHF</td>
+                        <td class="px-3 py-3">[PHF]</td>
+                    </tr>
+                    <!-- HF3 -->
+                    <tr>
+                        <td class="px-3 py-3">[HF3]</td>
+                        <td class="px-3 py-3">Turbulence</td>
+                        <td class="px-3 py-3">Q7: HF is caused by a UF</td>
+                        <td class="px-3 py-3 text-center"><span class="link-symbol">&larr;<svg width="1em" height="1em"><use xlink:href="#causes-symbol-square"/></svg></span></td>
+                        <td class="px-3 py-3">HF</td>
+                        <td class="px-3 py-3">[HF4]</td>
+                    </tr>
+                    <!-- HF5 -->
+                    <tr>
+                        <td class="px-3 py-3">[HF5]</td>
+                        <td class="px-3 py-3">Turbine Damage</td>
+                        <td class="px-3 py-3">Q8: UF introduced to eliminate HF</td>
+                        <td class="px-3 py-3 text-center"><span class="link-symbol">&#x25CB;&rarr;</span></td>
+                        <td class="px-3 py-3">PUF</td>
+                        <td class="px-3 py-3">(PUF)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
+

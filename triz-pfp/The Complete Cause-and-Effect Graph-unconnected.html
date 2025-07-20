@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://unpkg.com/@panzoom/panzoom@9.4.0/dist/panzoom.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Complete Cause-and-Effect Graph (Incremental Build)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .zoom-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .zoom-modal img {
+            max-width: none;
+            max-height: none;
+            border-radius: 16px;
+            box-shadow: 0 0 32px rgba(0,0,0,0.3);
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .final-diagram-wrapper {
+            background-color: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.75rem;
+            padding: 2rem;
+            width: 100vw;
+            max-width: 100vw;
+            overflow-x: visible;
+            display: flex;
+            flex-direction: row;
+            gap: 2rem;
+            align-items: flex-start;
+        }
+        .final-diagram-container {
+            position: relative;
+            width: 100vw;
+            height: 1100px;
+        }
+        .node {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: black;
+            font-weight: 600;
+            width: 150px; /* Reduced size */
+            height: 150px; /* Reduced size */
+            padding: 1rem;
+            flex-shrink: 0;
+            position: absolute;
+            z-index: 10;
+        }
+        .uf-node {
+            background-color: #dcfce7;
+            border: 2px solid transparent; /* Border removed */
+            border-radius: 50%;
+        }
+        .puf-node {
+            background-color: #dcfce7; /* Green fill */
+            border: 5px solid #f97316; /* Orange border */
+            border-radius: 50%;
+        }
+        .hf-node {
+            background-color: #fee2e2;
+            border: 2px solid transparent; /* Border removed */
+            border-radius: 0.5rem;
+        }
+        .phf-node {
+            background-color: #fee2e2;
+            border: 5px solid #f97316;
+            border-radius: 0.5rem;
+        }
+        .final-label {
+            position: absolute;
+            font-style: italic;
+            font-size: 0.75rem; /* Smaller font size */
+            color: #4b5563;
+            background-color: #f9fafb;
+            padding: 0 4px;
+            z-index: 6;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 p-4 sm:p-8">
+    <div style="width:100%;display:flex;align-items:center;justify-content:center;margin-bottom:2rem;">
+        <img src="ce.png" alt="Cause-and-Effect Graph" style="max-width:600px;width:100%;height:auto;border-radius:12px;box-shadow:0 0 16px rgba(0,0,0,0.08);cursor:zoom-in;" onclick="openZoomModal(this.src)">
+    </div>
+    <div id="zoomModal" class="zoom-modal" style="display:none;" onclick="closeZoomModal()">
+        <img id="zoomedImg" src="" alt="Zoomed Cause-and-Effect Graph">
+    </div>
+    <div>
+        <h1 class="text-3xl font-bold text-gray-900 mb-6">The Complete Cause-and-Effect Graph</h1>
+        <div class="final-diagram-wrapper">
+            <div class="final-diagram-container">
+                <!-- SVG Definitions and Lines -->
+                <svg class="absolute top-0 left-0 w-full h-full" style="z-index: 5;">
+    <!-- Removed duplicate image and container -->
+                    </defs>
+
+                </svg>
+
+                <!-- Nodes -->
+                <div class="node puf-node" style="left: 1175px; top: 25px;">Wind Energy Harvesting<div class="font-bold absolute -bottom-8">(PUF)</div></div>
+                <div class="node uf-node" style="left: 905px; top: 25px;">Convert Mech to Electrical<div class="font-bold absolute -bottom-8">(UF8)</div></div>
+                <div class="node uf-node" style="left: 635px; top: 25px;">RPM Multipliers<div class="font-bold absolute -bottom-8">(UF9)</div></div>
+                <div class="node uf-node" style="left: 365px; top: 25px;">Turbine Rotation<div class="font-bold absolute -bottom-8">(UF1)</div></div>
+                <div class="node uf-node" style="left: 95px; top: 25px;">Wind Speed & Direction<div class="font-bold absolute -bottom-8">(UF4)</div></div>
+                <div class="node hf-node" style="left: 95px; top: 275px;">Turbulence<div class="font-bold absolute -bottom-8">[HF3]</div></div>
+                <div class="node phf-node" style="left: 365px; top: 275px;">Wind Wake<div class="font-bold absolute -bottom-8">[PHF]</div></div>
+                <div class="node hf-node" style="left: 635px; top: 275px;">Slow Wind<div class="font-bold absolute -bottom-8">[HF2]</div></div>
+                <div class="node hf-node" style="left: 635px; top: 525px;">Autonomous Turbine<div class="font-bold absolute -bottom-8">[HF4]</div></div>
+                
+                <!-- NEWLY ADDED NODES (NO CONNECTIONS YET) -->
+                <div class="node uf-node" style="left: 95px; top: 525px;">Turbine Op. Coordination<div class="font-bold absolute -bottom-8">(UF2)</div></div>
+                <div class="node uf-node" style="left: 95px; top: 775px;">Turbine Management<div class="font-bold absolute -bottom-8">(UF5)</div></div>
+                <div class="node uf-node" style="left: 365px; top: 525px;">Control Blade Yaw<div class="font-bold absolute -bottom-8">(UF6)</div></div>
+                <div class="node uf-node" style="left: 905px; top: 525px;">High Wind Speed<div class="font-bold absolute -bottom-8">(UF3)</div></div>
+                <div class="node hf-node" style="left: 905px; top: 775px;">Turbine Damage<div class="font-bold absolute -bottom-8">[HF5]</div></div>
+
+            </div>
+        </div>
+        </div>
+    </div>
+</body>
+<script>
+let panzoomInstance = null;
+function openZoomModal(src) {
+    const img = document.getElementById('zoomedImg');
+    img.src = src;
+    document.getElementById('zoomModal').style.display = 'flex';
+    setTimeout(() => {
+        if (panzoomInstance) {
+            panzoomInstance.destroy();
+        }
+        panzoomInstance = Panzoom(img, {
+            maxScale: 3,
+            minScale: 1,
+            contain: 'outside',
+        });
+        img.parentElement.addEventListener('wheel', panzoomInstance.zoomWithWheel);
+    }, 90);
+}
+function closeZoomModal() {
+    document.getElementById('zoomModal').style.display = 'none';
+    if (panzoomInstance) {
+        panzoomInstance.destroy();
+        panzoomInstance = null;
+    }
+}
+</script>
+</html>
