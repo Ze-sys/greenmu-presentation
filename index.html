@@ -40,23 +40,56 @@
 <body>
     <nav style="width:100vw;position:fixed;top:0;left:0;z-index:100;background:#1abc9c;padding:0.5em 0.5em 0.5em 2em;box-shadow:0 2px 8px rgba(0,0,0,0.08);display:flex;align-items:center;">
       <span style="font-size:1.3em;font-weight:bold;color:#fff;margin-right:2em;">TRIZ PFP</span>
-      <ul style="list-style:none;display:flex;gap:1.5em;margin:0;padding:0;">
-        <li><a href="#" onclick="loadPresentation('triz-pfp/Step 1: Problem Identification.html')" style="color:#fff;text-decoration:none;font-size:1em;padding:0.3em 0.7em;border-radius:4px;transition:background 0.2s;">Step 1: Problem Identification</a></li>
-        <li><a href="#" onclick="loadPresentation('triz-pfp/Step 2: Functional Analysis.html')" style="color:#fff;text-decoration:none;font-size:1em;padding:0.3em 0.7em;border-radius:4px;transition:background 0.2s;">Step 2: Functional Analysis</a></li>
-        <li><a href="#" onclick="loadPresentation('triz-pfp/Step 2: Key Critical Functions.html')" style="color:#fff;text-decoration:none;font-size:1em;padding:0.3em 0.7em;border-radius:4px;transition:background 0.2s;">Step 2: Key Critical Functions</a></li>
-        <li><a href="#" onclick="loadPresentation('triz-pfp/Step 3: Probing Questions & Problem Statements.html')" style="color:#fff;text-decoration:none;font-size:1em;padding:0.3em 0.7em;border-radius:4px;transition:background 0.2s;">Step 3: Probing Questions</a></li>
-        <li><a href="#" onclick="loadPresentation('triz-pfp/Step 4: Classify and Prioritize.html')" style="color:#fff;text-decoration:none;font-size:1em;padding:0.3em 0.7em;border-radius:4px;transition:background 0.2s;">Step 4: Classify & Prioritize</a></li>
-        <li><a href="#" onclick="loadPresentation('triz-pfp/Section 5: CE Graph Construction.html')" style="color:#fff;text-decoration:none;font-size:1em;padding:0.3em 0.7em;border-radius:4px;transition:background 0.2s;">Step 5: CE Graph Construction</a></li>
-        <li><a href="#" onclick="loadPresentation('triz-pfp/complete-ce.html')" style="color:#fff;text-decoration:none;font-size:1em;padding:0.3em 0.7em;border-radius:4px;transition:background 0.2s;">Complete CE Graph (Image)</a></li>
+      <ul id="navbar-list" style="list-style:none;display:flex;gap:1.5em;margin:0;padding:0;">
+        <li><a href="#" data-url="welcome.html" onclick="setActiveNav(this, 'welcome.html')" class="nav-link" style="color:#fff;text-decoration:none;font-size:1em;padding:0.3em 0.7em;border-radius:4px;transition:background 0.2s;">Welcome</a></li>
+        <li><a href="#" data-url="triz-pfp/Step 1: Problem Identification.html" onclick="setActiveNav(this, 'triz-pfp/Step 1: Problem Identification.html')" class="nav-link" style="color:#fff;text-decoration:none;font-size:1em;padding:0.3em 0.7em;border-radius:4px;transition:background 0.2s;">Step 1: Problem Identification</a></li>
+        <li><a href="#" data-url="triz-pfp/Step 2: Functional Analysis.html" onclick="setActiveNav(this, 'triz-pfp/Step 2: Functional Analysis.html')" class="nav-link" style="color:#fff;text-decoration:none;font-size:1em;padding:0.3em 0.7em;border-radius:4px;transition:background 0.2s;">Step 2: Functional Analysis</a></li>
+  <script>
+    // ...existing code...
+    // ...existing code...
+  </script>
+        <li><a href="#" data-url="triz-pfp/Step 2: Key Critical Functions.html" onclick="setActiveNav(this, 'triz-pfp/Step 2: Key Critical Functions.html')" class="nav-link" style="color:#fff;text-decoration:none;font-size:1em;padding:0.3em 0.7em;border-radius:4px;transition:background 0.2s;">Step 2: Key Critical Functions</a></li>
+        <li><a href="#" data-url="triz-pfp/Step 3: Probing Questions & Problem Statements.html" onclick="setActiveNav(this, 'triz-pfp/Step 3: Probing Questions & Problem Statements.html')" class="nav-link" style="color:#fff;text-decoration:none;font-size:1em;padding:0.3em 0.7em;border-radius:4px;transition:background 0.2s;">Step 3: Probing Questions</a></li>
+        <li><a href="#" data-url="triz-pfp/Step 4: Classify and Prioritize.html" onclick="setActiveNav(this, 'triz-pfp/Step 4: Classify and Prioritize.html')" class="nav-link" style="color:#fff;text-decoration:none;font-size:1em;padding:0.3em 0.7em;border-radius:4px;transition:background 0.2s;">Step 4: Classify & Prioritize</a></li>
+        <li><a href="#" data-url="triz-pfp/Section 5: CE Graph Construction.html" onclick="setActiveNav(this, 'triz-pfp/Section 5: CE Graph Construction.html')" class="nav-link" style="color:#fff;text-decoration:none;font-size:1em;padding:0.3em 0.7em;border-radius:4px;transition:background 0.2s;">Step 5: CE Graph Construction</a></li>
+        <li><a href="#" data-url="triz-pfp/complete-ce.html" onclick="setActiveNav(this, 'triz-pfp/complete-ce.html')" class="nav-link" style="color:#fff;text-decoration:none;font-size:1em;padding:0.3em 0.7em;border-radius:4px;transition:background 0.2s;">Complete CE Graph (Image)</a></li>
       </ul>
     </nav>
   <div class="presentation-container" style="margin-top:4em;">
-    <iframe id="presentation-iframe" src="triz-pfp/Step 1: Problem Identification.html"></iframe>
+    <iframe id="presentation-iframe" src="welcome.html"></iframe>
   </div>
   <script>
-    function loadPresentation(url) {
+    function setActiveNav(link, url) {
+      // Remove highlight from all links
+      document.querySelectorAll('.nav-link').forEach(function(el) {
+        el.style.background = 'none';
+        el.style.color = '#fff';
+      });
+      // Highlight the clicked link
+      link.style.background = '#fff';
+      link.style.color = '#1abc9c';
+      // Set iframe
       document.getElementById('presentation-iframe').src = url;
+      // Store active url
+      window.localStorage.setItem('activeNavUrl', url);
     }
+
+    // On page load, highlight the correct nav item and set iframe
+    window.addEventListener('DOMContentLoaded', function() {
+      var activeUrl = window.localStorage.getItem('activeNavUrl') || 'welcome.html';
+      var found = false;
+      document.querySelectorAll('.nav-link').forEach(function(link) {
+        if (link.getAttribute('data-url') === activeUrl) {
+          link.style.background = '#fff';
+          link.style.color = '#1abc9c';
+          found = true;
+        } else {
+          link.style.background = 'none';
+          link.style.color = '#fff';
+        }
+      });
+      document.getElementById('presentation-iframe').src = activeUrl;
+    });
   </script>
 </body>
 </html>

@@ -30,6 +30,26 @@
             align-items: center;
             gap: 0; /* Removed gap */
         }
+        .function-tooltip {
+            position: relative;
+            cursor: pointer;
+        }
+        .function-tooltip:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            left: 50%;
+            top: 2em;
+            transform: translateX(-50%);
+            background: #222;
+            color: #fff;
+            padding: 0.5em 1em;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 100;
+            white-space: nowrap;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+        }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800 p-4 sm:p-8">
@@ -67,7 +87,7 @@
                         <td class="px-3 py-3">Q4: UF requires another UF before</td>
                         <td class="px-3 py-3 text-center"><span class="link-symbol">&larr;</span></td>
                         <td class="px-3 py-3">UF</td>
-                        <td class="px-3 py-3">(UF8)</td>
+                        <td class="px-3 py-3"><span class="function-tooltip" data-tooltip="Convert Mech to Electrical">(UF8)</span></td>
                     </tr>
                     <!-- UF1 -->
                     <tr>
@@ -76,19 +96,19 @@
                         <td class="px-3 py-3">Q1: UF is required for another UF</td>
                         <td class="px-3 py-3 text-center"><span class="link-symbol">&rarr;</span></td>
                         <td class="px-3 py-3">UF</td>
-                        <td class="px-3 py-3">(UF9)</td>
+                        <td class="px-3 py-3"><span class="function-tooltip" data-tooltip="RPM Multipliers">(UF9)</span></td>
                     </tr>
                     <tr>
                         <td class="px-3 py-3">Q4: UF requires another UF before</td>
                         <td class="px-3 py-3 text-center"><span class="link-symbol">&larr;</span></td>
                         <td class="px-3 py-3">UF</td>
-                        <td class="px-3 py-3">(UF4)</td>
+                        <td class="px-3 py-3"><span class="function-tooltip" data-tooltip="Wind Speed & Direction">(UF4)</span></td>
                     </tr>
                      <tr>
                         <td class="px-3 py-3">Q7: HF is caused by a UF (inversely)</td>
                         <td class="px-3 py-3 text-center"><span class="link-symbol">&larr;<svg width="1em" height="1em"><use xlink:href="#causes-symbol-square"/></svg></span></td>
                         <td class="px-3 py-3">HF</td>
-                        <td class="px-3 py-3">[HF2]</td>
+                        <td class="px-3 py-3"><span class="function-tooltip" data-tooltip="Slow Wind">[HF2]</span></td>
                     </tr>
                     <!-- UF2 -->
                     <tr>
@@ -97,13 +117,13 @@
                         <td class="px-3 py-3">Q1: UF is required for another UF</td>
                         <td class="px-3 py-3 text-center"><span class="link-symbol">&rarr;</span></td>
                         <td class="px-3 py-3">UF</td>
-                        <td class="px-3 py-3">(UF5)</td>
+                        <td class="px-3 py-3"><span class="function-tooltip" data-tooltip="Turbine Management">(UF5)</span></td>
                     </tr>
                     <tr>
                         <td class="px-3 py-3">Q3: UF used to eliminate HF</td>
                         <td class="px-3 py-3 text-center"><span class="link-symbol">&#x25CB;&rarr;</span></td>
                         <td class="px-3 py-3">HF</td>
-                        <td class="px-3 py-3">[HF4]</td>
+                        <td class="px-3 py-3"><span class="function-tooltip" data-tooltip="Autonomous Turbine">[HF4]</span></td>
                     </tr>
                     <!-- UF3 -->
                     <tr>
@@ -112,7 +132,7 @@
                         <td class="px-3 py-3">Q2: UF causes an HF</td>
                         <td class="px-3 py-3 text-center"><span class="link-symbol"><svg width="1em" height="1em"><use xlink:href="#causes-symbol-square"/></svg>&rarr;</span></td>
                         <td class="px-3 py-3">HF</td>
-                        <td class="px-3 py-3">[HF5]</td>
+                        <td class="px-3 py-3"><span class="function-tooltip" data-tooltip="Turbine Damage">[HF5]</span></td>
                     </tr>
                     <!-- UF4 -->
                      <tr>
@@ -121,7 +141,7 @@
                         <td class="px-3 py-3">Q2: UF causes an HF</td>
                         <td class="px-3 py-3 text-center"><span class="link-symbol"><svg width="1em" height="1em"><use xlink:href="#causes-symbol-square"/></svg>&rarr;</span></td>
                         <td class="px-3 py-3">HF</td>
-                        <td class="px-3 py-3">[HF3]</td>
+                        <td class="px-3 py-3"><span class="function-tooltip" data-tooltip="Turbulence">[HF3]</span></td>
                     </tr>
                     <!-- UF5 -->
                     <tr>
@@ -130,7 +150,7 @@
                         <td class="px-3 py-3">Q1: UF is required for another UF</td>
                         <td class="px-3 py-3 text-center"><span class="link-symbol">&rarr;</span></td>
                         <td class="px-3 py-3">UF</td>
-                        <td class="px-3 py-3">(UF6)</td>
+                        <td class="px-3 py-3"><span class="function-tooltip" data-tooltip="Control Blade Yaw">(UF6)</span></td>
                     </tr>
                     <!-- UF8 -->
                     <tr>
@@ -157,7 +177,7 @@
                         <td class="px-3 py-3">Q6: HF is caused by another HF</td>
                         <td class="px-3 py-3 text-center"><span class="link-symbol">&larr;&#x25CB;</span></td>
                         <td class="px-3 py-3">PHF</td>
-                        <td class="px-3 py-3">[PHF]</td>
+                        <td class="px-3 py-3"><span class="function-tooltip" data-tooltip="Wind Wake">[PHF]</span></td>
                     </tr>
                     <!-- HF3 -->
                     <tr>
@@ -175,7 +195,7 @@
                         <td class="px-3 py-3">Q8: UF introduced to eliminate HF</td>
                         <td class="px-3 py-3 text-center"><span class="link-symbol">&#x25CB;&rarr;</span></td>
                         <td class="px-3 py-3">PUF</td>
-                        <td class="px-3 py-3">(PUF)</td>
+                        <td class="px-3 py-3"><span class="function-tooltip" data-tooltip="Wind Energy Harvesting">(PUF)</span></td>
                     </tr>
                 </tbody>
             </table>
